@@ -536,6 +536,20 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
   }
   flush();return out;
  }
+ function parseStatementDate(value){
+  if(value===null||value===undefined||value==='')return '';
+  if(value instanceof Date){return Number.isNaN(value.getTime())?'':value.toISOString()}
+  if(typeof value==='number'&&Number.isFinite(value)){
+   // Excel dates are serial days from 30 December 1899.
+   const d=new Date(Date.UTC(1899,11,30)+Math.floor(value)*86400000+(value%1)*86400000);
+   return Number.isNaN(d.getTime())?'':d.toISOString();
+  }
+  const raw=String(value).trim();if(!raw)return '';
+  // Handle common Indian statement dates: DD/MM/YYYY and DD-MM-YYYY.
+  const m=raw.match(/^(\\d{1,2})[\\/-](\\d{1,2})[\\/-](\\d{4})(.*)$/);
+  if(m){const day=+m[1],month=+m[2],year=+m[3];const tail=m[4]||'';const d=new Date(year,month-1,day);if(d.getFullYear()!==year||d.getMonth()!==month-1||d.getDate()!==day)return '';const withTime=tail.trim()?new Date(d.toDateString()+' '+tail.trim()):d;return Number.isNaN(withTime.getTime())?'':withTime.toISOString()}
+  const parsed=new Date(raw);return Number.isNaN(parsed.getTime())?'':parsed.toISOString();
+ }
  function parseExcel(file){
   return file.arrayBuffer().then(buf=>{const wb=XLSX.read(buf,{type:'array',cellDates:true}),out=[];
    wb.SheetNames.forEach(sn=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:'',raw:true});rows.forEach(r=>{
@@ -545,9 +559,10 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
     let amount=Number(String(rawAmt).replace(/[^0-9.-]/g,''));let direction=Number(pick(['credit']))>0?'credit':Number(pick(['debit']))>0?'debit':amount<0?'debit':'unknown';
     if(!amount&&Number(pick(['debit']))>0)amount=Number(pick(['debit']));
     if(!amount&&Number(pick(['credit']))>0)amount=Number(pick(['credit']));
-    const dt=pick(['date & time','date','transaction date','timestamp']);
-    const date=dt instanceof Date?dt.toISOString():new Date(dt).toISOString();
-    out.push(classify({description:String(desc||'UPI payment'),amount,direction,date,ref:String(pick(['upi ref','utr','reference no','transaction id','txn id'])),tag:String(pick(['tag','category'])),category:String(pick(['tag','category']))}));
+    const dt=pick(['date & time','transaction date','timestamp','date']);
+    const date=parseStatementDate(dt);
+    if(!date||!Number.isFinite(amount)||amount<=0) return;
+    out.push(classify({description:String(desc||'UPI payment'),amount:Math.abs(amount),direction,date,ref:String(pick(['upi ref','utr','reference no','transaction id','txn id'])),tag:String(pick(['tag','category'])),category:String(pick(['tag','category']))}));
    })});return out.filter(x=>x.amount>0);
   });
  }
