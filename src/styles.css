@@ -122,3 +122,59 @@ input:focus,select:focus,textarea:focus{border-color:#7772df;box-shadow:0 0 0 3p
 .results-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:12px 0;color:#737995;font-size:11px}.results-heading b{color:#292a54;font-size:12px}
 @media(max-width:900px){.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.filter-primary{grid-template-columns:1fr 1fr}.filter-primary .searchbox{grid-column:1/-1}.filter-primary>select{font-size:10px;padding:10px 8px}.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.filter-grid input,.filter-grid select{padding:10px 8px}.income-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.income-summary article:first-child{grid-column:1/-1}.income-summary b{font-size:19px}.source-list{grid-template-columns:1fr}.filter-actions{align-items:flex-start;flex-direction:column}.income-sources{padding:13px}.results-heading{align-items:flex-start;flex-direction:column;gap:4px}}
+
+/* Mobile-first reading: turn wide data grids into compact cards */
+@media(max-width:700px){
+ .tablewrap{max-width:100%;overflow:visible}
+ .transaction-table table{display:block;width:100%;min-width:0}
+ .transaction-table thead{display:none}
+ .transaction-table tbody{display:grid;gap:10px}
+ .transaction-table tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 10px;padding:13px 13px 11px;border:1px solid #e9eaf3;border-radius:15px;background:#fff;box-shadow:0 4px 14px #1d205008}
+ .transaction-table td{display:block;border:0;padding:0;min-width:0;text-align:left}
+ .transaction-table td:before{content:attr(data-label);display:block;margin-bottom:4px;font-size:9px;line-height:1.2;letter-spacing:.03em;text-transform:uppercase;color:#9296ad;font-weight:700}
+ .transaction-table td[data-label="Transaction"]{grid-column:1/-1;padding-bottom:7px;border-bottom:1px solid #f0f0f6}
+ .transaction-table td[data-label="Transaction"] b{font-size:13px;line-height:1.35;display:block;overflow-wrap:anywhere}
+ .transaction-table td[data-label="Transaction"] small{font-size:10px;margin-top:3px}
+ .transaction-table td[data-label="Category"]{grid-column:1;align-self:end;font-size:11px;color:#515674}
+ .transaction-table td[data-label="Date"]{grid-column:2;text-align:right;font-size:10px;color:#858aa2}
+ .transaction-table td[data-label="Type"]{grid-column:1;align-self:center}
+ .transaction-table td[data-label="Amount"]{grid-column:2;grid-row:3;text-align:right;font-size:15px;font-weight:800;align-self:center}
+ .transaction-table td[data-label="Amount"]:before{display:inline;margin-right:6px}
+ .transaction-table td[data-label="Actions"]{grid-column:1/-1;border-top:1px solid #f0f0f6;padding-top:7px}
+ .card-actions{display:flex;gap:7px;justify-content:flex-end}
+ .card-actions .rowbtn{padding:6px 12px;border-radius:8px;background:#f2f1ff}
+ .card-actions .rowbtn.danger{background:#fff0ee}
+ /* Investment list also becomes stacked cards rather than a sideways table */
+ .tablewrap:not(.transaction-table) table{display:block;min-width:0;width:100%}
+ .tablewrap:not(.transaction-table) thead{display:none}
+ .tablewrap:not(.transaction-table) tbody{display:grid;gap:9px}
+ .tablewrap:not(.transaction-table) tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;padding:12px;border:1px solid #e9eaf3;border-radius:14px;background:#fff}
+ .tablewrap:not(.transaction-table) tbody td{display:block;border:0;padding:0;min-width:0;font-size:11px;overflow-wrap:anywhere}
+ .tablewrap:not(.transaction-table) tbody td:first-child{grid-column:1/-1;border-bottom:1px solid #f0f0f6;padding-bottom:7px}
+ .tablewrap:not(.transaction-table) tbody td:last-child{grid-column:1/-1;border-top:1px solid #f0f0f6;padding-top:7px;text-align:right}
+ .tablewrap:not(.transaction-table) tbody td:nth-child(2):before{content:'Asset type';display:block;color:#9296ad;font-size:9px;text-transform:uppercase;margin-bottom:3px}
+ .tablewrap:not(.transaction-table) tbody td:nth-child(3):before{content:'Invested';display:block;color:#9296ad;font-size:9px;text-transform:uppercase;margin-bottom:3px}
+ .tablewrap:not(.transaction-table) tbody td:nth-child(4):before{content:'Current value';display:block;color:#9296ad;font-size:9px;text-transform:uppercase;margin-bottom:3px}
+ .tablewrap:not(.transaction-table) tbody td:nth-child(5):before{content:'Gain / loss';display:block;color:#9296ad;font-size:9px;text-transform:uppercase;margin-bottom:3px}
+ .tablewrap:not(.transaction-table) tbody td:nth-child(6):before{content:'Status';display:block;color:#9296ad;font-size:9px;text-transform:uppercase;margin-bottom:3px}
+ .tablewrap:not(.transaction-table) tbody td:nth-child(7):before{content:'Actions';display:block;color:#9296ad;font-size:9px;text-transform:uppercase;margin-bottom:5px}
+ /* Statement review is dense by nature: show each imported row as a review card */
+ .import-summary{align-items:flex-start;flex-wrap:wrap;gap:10px}
+ .tablewrap:has(input[type="checkbox"]) table{display:block;min-width:0;width:100%}
+ .tablewrap:has(input[type="checkbox"]) thead{display:none}
+ .tablewrap:has(input[type="checkbox"]) tbody{display:grid;gap:10px}
+ .tablewrap:has(input[type="checkbox"]) tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;border:1px solid #e8e8f2;border-radius:14px;background:#fff}
+ .tablewrap:has(input[type="checkbox"]) tbody td{display:block;border:0;padding:0;min-width:0;font-size:11px;overflow-wrap:anywhere}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(1){grid-column:1/-1}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(2):before{content:'Date';display:block;color:#9296ad;font-size:9px;text-transform:uppercase}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(3){grid-column:1/-1;font-weight:700}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(3):before{content:'Description / reference';display:block;color:#9296ad;font-size:9px;text-transform:uppercase}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(4):before{content:'Amount';display:block;color:#9296ad;font-size:9px;text-transform:uppercase}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(5):before{content:'Type';display:block;color:#9296ad;font-size:9px;text-transform:uppercase}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(6):before{content:'Category';display:block;color:#9296ad;font-size:9px;text-transform:uppercase}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(7):before{content:'Person';display:block;color:#9296ad;font-size:9px;text-transform:uppercase}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(8){grid-column:1/-1}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(8):before{content:'Status';display:block;color:#9296ad;font-size:9px;text-transform:uppercase}
+ .tablewrap:has(input[type="checkbox"]) select,.tablewrap:has(input[type="checkbox"]) input:not([type="checkbox"]){width:100%;min-width:0;max-width:100%;font-size:10px;padding:8px}
+ .tablewrap:has(input[type="checkbox"]) tbody td:nth-child(4){font-weight:800;color:#28285e}
+}
