@@ -548,7 +548,7 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
   }
   const raw=String(value).trim();if(!raw)return '';
   // Handle common Indian statement dates: DD/MM/YYYY and DD-MM-YYYY.
-  const m=raw.match(/^(\\d{1,2})[\\/-](\\d{1,2})[\\/-](\\d{4})(.*)$/);
+  const m=raw.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})(.*)$/);
   if(m){const day=+m[1],month=+m[2],year=+m[3];const tail=m[4]||'';const d=new Date(year,month-1,day);if(d.getFullYear()!==year||d.getMonth()!==month-1||d.getDate()!==day)return '';const withTime=tail.trim()?new Date(d.toDateString()+' '+tail.trim()):d;return Number.isNaN(withTime.getTime())?'':withTime.toISOString()}
   const parsed=new Date(raw);return Number.isNaN(parsed.getTime())?'':parsed.toISOString();
  }
