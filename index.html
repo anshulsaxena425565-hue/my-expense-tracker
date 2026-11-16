@@ -553,19 +553,36 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
   const parsed=new Date(raw);return Number.isNaN(parsed.getTime())?'':parsed.toISOString();
  }
  function parseExcel(file){
-  return file.arrayBuffer().then(buf=>{const wb=XLSX.read(buf,{type:'array',cellDates:true}),out=[];
-   wb.SheetNames.forEach(sn=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:'',raw:true});rows.forEach(r=>{
-    const keys=Object.keys(r),pick=(terms)=>{const k=keys.find(x=>terms.some(t=>norm(x).includes(t)));return k?r[k]:''};
-    const desc=pick(['transaction details','description','particular','merchant','payee','narration','name']);
-    const rawAmt=pick(['amount','debit','credit','paid','received']);
-    let amount=Number(String(rawAmt).replace(/[^0-9.-]/g,''));let direction=Number(pick(['credit']))>0?'credit':Number(pick(['debit']))>0?'debit':amount<0?'debit':'unknown';
-    if(!amount&&Number(pick(['debit']))>0)amount=Number(pick(['debit']));
-    if(!amount&&Number(pick(['credit']))>0)amount=Number(pick(['credit']));
-    const dt=pick(['date & time','transaction date','timestamp','date']);
-    const date=parseStatementDate(dt);
-    if(!date||!Number.isFinite(amount)||amount<=0) return;
-    out.push(classify({description:String(desc||'UPI payment'),amount:Math.abs(amount),direction,date,ref:String(pick(['upi ref','utr','reference no','transaction id','txn id'])),tag:String(pick(['tag','category'])),category:String(pick(['tag','category']))}));
-   })});return out.filter(x=>x.amount>0);
+  return file.arrayBuffer().then(buf=>{
+   const wb=XLSX.read(buf,{type:'array',cellDates:true}),out=[];
+   // Only parse sheets that actually contain transaction-history columns.
+   wb.SheetNames.forEach(sn=>{
+    const sheet=wb.Sheets[sn];
+    const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:'',raw:true});
+    const headerIndex=matrix.findIndex(row=>{
+     const h=row.map(x=>norm(x));
+     return h.some(x=>x.includes('date'))&&h.some(x=>x.includes('amount'))&&h.some(x=>x.includes('transaction details')||x.includes('description')||x.includes('particular'));
+    });
+    if(headerIndex<0)return;
+    const headers=matrix[headerIndex].map(x=>String(x||'').trim());
+    const rows=XLSX.utils.sheet_to_json(sheet,{range:headerIndex,defval:'',raw:true});
+    rows.forEach(r=>{
+     const get=(terms)=>{const k=headers.find(x=>terms.some(t=>norm(x)===t||norm(x).includes(t)));return k?r[k]:''};
+     const desc=String(get(['transaction details','description','particular','merchant','payee','narration'])||'').trim();
+     const rawAmount=get(['amount']);
+     const amountText=String(rawAmount??'').replace(/,/g,'').replace(/₹|rs\.?/ig,'').trim();
+     const signed=Number(amountText);
+     if(!desc||!Number.isFinite(signed)||signed===0)return;
+     const date=parseStatementDate(get(['date & time','transaction date','timestamp','date']));
+     if(!date)return;
+     const direction=signed<0?'debit':(/received from|money received|refund|cashback/i.test(desc)?'credit':'credit');
+     const tag=String(get(['tags','tag','category'])||'').trim();
+     const ref=String(get(['upi ref no','upi ref','utr','reference no','transaction id','txn id'])||'').trim();
+     const accountName=String(get(['your account','account'])||'').trim();
+     out.push(classify({description:desc,amount:Math.abs(signed),direction,date,dateText:date?new Date(date).toLocaleDateString('en-IN'):'',ref,tag,category:tag,account:accountName}));
+    });
+   });
+   return out;
   });
  }
  async function parsePDF(file){
