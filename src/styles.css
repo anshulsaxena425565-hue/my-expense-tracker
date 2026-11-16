@@ -92,3 +92,5 @@ input:focus,select:focus,textarea:focus{border-color:#7772df;box-shadow:0 0 0 3p
  .stats.three{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:380px){.actions .btn{padding:8px 7px;font-size:9px}.main h1{font-size:20px}.side button{font-size:8px}}
+
+.data-alert{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:14px 16px;border:1px solid #f1c9c5;background:#fff4f2;color:#8d3934;border-radius:14px;font-size:12px}.data-alert span{flex:1;min-width:200px}.data-alert.subtle{border-color:#f3dfb7;background:#fff9ec;color:#79551d}.data-alert .btn{padding:8px 12px;font-size:11px}
