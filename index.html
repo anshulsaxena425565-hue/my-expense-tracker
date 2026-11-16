@@ -487,6 +487,12 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
  const norm=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
  function getUserRules(){try{return JSON.parse(localStorage.getItem('pocket_import_rules_'+(bridge.bridge.user?.$id||'guest'))||'[]')}catch{return []}}
  function saveUserRules(rules){localStorage.setItem('pocket_import_rules_'+(bridge.user?.$id||'guest'),JSON.stringify(rules))}
+ function normalizeImportedCategory(value){
+  const key=norm(String(value||'').replace(/^#+/,''));
+  const aliases={'food':'Food & Drinks','food drink':'Food & Drinks','food drinks':'Food & Drinks','grocery':'Groceries','groceries':'Groceries','transportation':'Transport','transport':'Transport','parking':'Transport','taxi':'Transport','cab':'Transport','bill':'Bills & Utilities','bills':'Bills & Utilities','bill utilities':'Bills & Utilities','bills utilities':'Bills & Utilities','medical':'Health','medicine':'Health','medicines':'Health','health':'Health','miscellaneous':'Other','misc':'Other','others':'Other','other':'Other','gift':'Gifts','gifts':'Gifts','money transfer':'Money Transfer','transfer':'Money Transfer'};
+  if(aliases[key])return aliases[key];
+  return builtIn.find(c=>norm(c)===key)||'';
+ }
  function applyUserRule(payee){const t=norm(payee);return getUserRules().find(r=>r.match&&t.includes(norm(r.match)))||null}
  function renderUserRules(){const box=$id('upiSavedRules');if(!box)return;const rules=getUserRules();box.innerHTML=rules.length?rules.map((r,i)=>'<div class="saved-rule"><div><strong>'+escapeHTML(r.match)+' → '+escapeHTML(r.category)+'</strong><small>Assigned to: '+escapeHTML(r.assignedTo||'Not specified')+'</small></div><button type="button" data-rule-delete="'+i+'">Remove</button></div>').join(''):'<p class="muted">No personal rules yet. Add one above.</p>';box.querySelectorAll('[data-rule-delete]').forEach(b=>b.onclick=()=>{const a=getUserRules();a.splice(+b.dataset.ruleDelete,1);saveUserRules(a);renderUserRules()})}
  $id('upiRuleForm').addEventListener('submit',e=>{e.preventDefault();const match=$id('ruleMatch').value.trim(),category=$id('ruleCategory').value.trim(),assignedTo=$id('ruleAssigned').value.trim();if(!match||!category)return;const rules=getUserRules().filter(r=>norm(r.match)!==norm(match));rules.unshift({match,category,assignedTo});saveUserRules(rules);e.target.reset();renderUserRules();bridge.toast('Import rule saved.')});
@@ -516,7 +522,8 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
   const merchant=String(d).replace(/^(paid to|money sent to|sent to|received from|transferred to self|paid for)\s*/i,'').trim();
   const tag=raw.tag||'';
   const customRule=applyUserRule(merchant);
-  const tagName=String(tag).replace(/^#\\s*/,'').trim().toLowerCase();const tagMap={'food':'Food & Drinks','groceries':'Groceries','taxi':'Transport','travel':'Transport','shopping':'Shopping','medical':'Health','bill payments':'Bills & Utilities','gifts':'Gifts','parking':'Transport','services':'Services','miscellaneous':'Other'};const category=customRule?.category||raw.category||tagMap[tagName]||guessCategory(merchant,tag,raw.upi||'');
+  const normalizedTag=normalizeImportedCategory(tag);
+  const category=customRule?.category||normalizeImportedCategory(raw.category)||normalizedTag||guessCategory(merchant,tag,raw.upi||'');
   const personTransfer=/money sent to|transfer/.test(text)&&!self&&!category;
   return {...raw,name:merchant||d,assignedTo:customRule?.assignedTo||raw.assignedTo||'',amount:absolute,direction:credit?'credit':'debit',category:category||'Needs review',needsReview:!excluded&&!credit&&(!category||personTransfer),excluded,ref,method:'UPI',date:raw.date||new Date().toISOString(),selected:!excluded&&!credit&&!!category&&!personTransfer,reason:excluded?'Internal transfer / hold / reversal':credit?'Money received':(!category?'Category needs confirmation':'')};
  }
@@ -590,7 +597,7 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
      const ref=String(get(['upi ref no','upi ref','utr','reference no','transaction id','txn id'])||'').trim();
      const accountName=String(get(['your account','account'])||'').trim();
      const dateText=new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(dateObj);
-     out.push(classify({description:desc,amount:Math.abs(signed),direction,date,dateText,ref,tag,category:tag,account:accountName,time:timeText}));
+     out.push(classify({description:desc,amount:Math.abs(signed),direction,date,dateText,ref,tag,category:normalizeImportedCategory(tag),account:accountName,time:timeText}));
     });
    });
    return out;
