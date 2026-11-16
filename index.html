@@ -514,6 +514,7 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
   const credit=direction==='credit'||/received from|money received|unblocked/.test(text);
   const merchant=String(d).replace(/^(paid to|money sent to|sent to|received from|transferred to self|paid for)\s*/i,'').trim();
   const tag=raw.tag||'';
+  const customRule=applyUserRule(merchant);
   const tagName=String(tag).replace(/^#\\s*/,'').trim().toLowerCase();const tagMap={'food':'Food & Drinks','groceries':'Groceries','taxi':'Transport','travel':'Transport','shopping':'Shopping','medical':'Health','bill payments':'Bills & Utilities','gifts':'Gifts','parking':'Transport','services':'Services','miscellaneous':'Other'};const category=customRule?.category||raw.category||tagMap[tagName]||guessCategory(merchant,tag,raw.upi||'');
   const personTransfer=/money sent to|transfer/.test(text)&&!self&&!category;
   return {...raw,name:merchant||d,assignedTo:customRule?.assignedTo||raw.assignedTo||'',amount:absolute,direction:credit?'credit':'debit',category:category||'Needs review',needsReview:!excluded&&!credit&&(!category||personTransfer),excluded,ref,method:'UPI',date:raw.date||new Date().toISOString(),selected:!excluded&&!credit&&!!category&&!personTransfer,reason:excluded?'Internal transfer / hold / reversal':credit?'Money received':(!category?'Category needs confirmation':'')};
