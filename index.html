@@ -573,13 +573,24 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
      const amountText=String(rawAmount??'').replace(/,/g,'').replace(/₹|rs\.?/ig,'').trim();
      const signed=Number(amountText);
      if(!desc||!Number.isFinite(signed)||signed===0)return;
-     const date=parseStatementDate(get(['date & time','transaction date','timestamp','date']));
-     if(!date)return;
-     const direction=signed<0?'debit':(/received from|money received|refund|cashback/i.test(desc)?'credit':'credit');
+     const dateValue=get(['date & time','transaction date','timestamp','date']);
+     const timeValue=get(['time']);
+     const baseDate=parseStatementDate(dateValue);
+     if(!baseDate)return;
+     // Paytm exports Date and Time in separate columns. Preserve both, including Excel time fractions.
+     let timeText='';
+     if(timeValue instanceof Date&&!Number.isNaN(timeValue.getTime())) timeText=[timeValue.getHours(),timeValue.getMinutes(),timeValue.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');
+     else if(typeof timeValue==='number'&&Number.isFinite(timeValue)){const seconds=Math.round((timeValue%1)*86400);timeText=[Math.floor(seconds/3600),Math.floor(seconds%3600/60),seconds%60].map(n=>String(n).padStart(2,'0')).join(':')}
+     else timeText=String(timeValue||'').trim();
+     const dateObj=new Date(baseDate);
+     if(timeText){const tm=timeText.match(/(\\d{1,2}):(\\d{2})(?::(\\d{2}))?/);if(tm)dateObj.setHours(+tm[1],+tm[2],+(tm[3]||0),0)}
+     const date=dateObj.toISOString();
+     const direction=signed<0?'debit':'credit';
      const tag=String(get(['tags','tag','category'])||'').trim();
      const ref=String(get(['upi ref no','upi ref','utr','reference no','transaction id','txn id'])||'').trim();
      const accountName=String(get(['your account','account'])||'').trim();
-     out.push(classify({description:desc,amount:Math.abs(signed),direction,date,dateText:date?new Date(date).toLocaleDateString('en-IN'):'',ref,tag,category:tag,account:accountName}));
+     const dateText=new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(dateObj);
+     out.push(classify({description:desc,amount:Math.abs(signed),direction,date,dateText,ref,tag,category:tag,account:accountName,time:timeText}));
     });
    });
    return out;
