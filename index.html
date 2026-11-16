@@ -261,6 +261,54 @@ body{overflow-x:hidden}
 }
 @media(prefers-reduced-motion:reduce){.sidebar,.sidebar-backdrop{transition:none!important}}
 </style>
+
+<style id="pocket-visual-system-v2">
+:root{
+ --bg:#f5f7fc;--panel:#ffffff;--ink:#18243a;--muted:#748198;--line:#e6ebf4;
+ --brand:#6558e8;--brand2:#887cf4;--green:#149b78;--red:#dc6070;
+ --shadow:0 5px 22px rgba(31,47,79,.045)
+}
+html,body{background:var(--bg)!important;color:var(--ink)}
+.main{background:var(--bg)!important}
+.topbar{
+ background:rgba(245,247,252,.94)!important;
+ border-bottom:1px solid #e4e9f2!important;
+ box-shadow:0 5px 18px rgba(32,48,78,.025);
+ padding:16px 2px!important;
+ margin-bottom:24px!important
+}
+.welcome h1{color:#17243b!important;font-size:25px!important;font-weight:800}
+.welcome p{color:#77849a!important}
+.top-actions .select{background:#fff!important;border:1px solid #e1e7f1!important;color:#35435b!important;box-shadow:0 2px 6px #23314b08}
+.primary{background:linear-gradient(120deg,#6558e8,#8067e9)!important;box-shadow:0 7px 18px rgba(101,88,232,.2)!important}
+.primary:hover{background:linear-gradient(120deg,#5548d4,#7058dc)!important;transform:translateY(-1px)}
+.sidebar{background:linear-gradient(165deg,#1b2947 0%,#17223c 100%)!important}
+.brand-mark{background:linear-gradient(140deg,#ffc978,#f4a16f)!important;color:#49364a!important;box-shadow:0 5px 14px #f4a16f30}
+.nav-label{color:#91a1bc!important}
+.nav button{color:#c0cbe0!important}
+.nav button .ico{color:#9cafff!important}
+.nav button.active{background:linear-gradient(100deg,#6c70dc35,#8a83ef17)!important;box-shadow:inset 3px 0 #aeb5ff!important;color:#fff!important}
+.nav button:hover{background:#ffffff12!important;color:#fff!important}
+.profile{background:#ffffff0d!important;border:1px solid #ffffff12!important}
+.avatar{background:#d9e8ff!important;color:#3c59a2!important}
+.logout-btn{background:#ffffff0b!important;border:1px solid #ffffff1c!important;color:#dce6f8!important}
+.card{background:#fff!important;border:1px solid #e5eaf3!important;box-shadow:0 5px 22px rgba(31,47,79,.045)!important;border-radius:18px!important}
+.stat-icon{background:#f0edff!important;color:#6558e8!important}
+.stats .card:nth-child(2) .stat-icon{background:#eaf1ff!important;color:#4778d4!important}
+.stats .card:nth-child(3) .stat-icon{background:#e5f7f1!important;color:#159b78!important}
+.stats .card:nth-child(4) .stat-icon{background:#fff1e7!important;color:#d98945!important}
+.card h2,.card-head h2{color:#1b2940!important}
+.card p,.stat-foot,.stat-top{color:#7b879b!important}
+th{color:#8190a6!important}
+td{color:#26344b!important}
+.method{background:#edf2ff!important;color:#5269b3!important}
+.category-dot{background:#edf1ff!important;color:#5d6fd0!important}
+.link-btn{color:#6259df!important}
+input,select,textarea{accent-color:#6558e8}
+@media(max-width:760px){
+ .topbar{background:rgba(245,247,252,.97)!important;box-shadow:0 5px 16px rgba(32,48,78,.035)!important}
+}
+</style>
 </head>
 <body>
 <div id="auth" class="auth-screen">
