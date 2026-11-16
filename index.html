@@ -311,7 +311,7 @@ input,select,textarea{accent-color:#6558e8}
 </style>
 
 <style id="pocket-upi-import-style">
-#imports-placeholder{display:none}
+#imports-placeholder{display:none}#page-imports [hidden]{display:none!important}#upiFileName{display:block;max-width:100%;overflow-wrap:anywhere}#upiDrop.is-reading{border-color:#6558e8!important;background:#f5f4ff!important}
 .import-drop{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1.5px dashed #c9d2e5!important;background:linear-gradient(135deg,#fff,#f6f7ff)!important;gap:10px}
 .import-drop h2{margin:4px 0 0}.import-drop p{color:var(--muted);margin:0 0 8px}.import-drop small{color:var(--muted);font-size:11px;margin-top:7px}
 .import-icon{width:60px;height:60px;border-radius:19px;display:grid;place-items:center;background:#eeedff;color:#6659e8;font-size:28px}
@@ -357,7 +357,7 @@ input,select,textarea{accent-color:#6558e8}
  <div class="card import-drop" id="upiDrop">
   <div class="import-icon"><i class="ph ph-files"></i></div><h2>Drop your statement here</h2><p>Paytm PDF statements and Excel files (.xlsx, .xls, .csv)</p>
   <label class="primary" for="upiFile">Choose statement</label><input id="upiFile" type="file" accept=".pdf,.xlsx,.xls,.csv,application/pdf" hidden>
-  <small>Files are processed in your browser. Your statement is not uploaded to a third-party server.</small>
+  <small id="upiFileName">Files are processed in your browser. Your statement is not uploaded to a third-party server.</small>
  </div>
  <div class="card" id="upiProgress" hidden><div class="card-head"><h2 id="upiStatus">Reading statement…</h2></div><div class="import-progress"><span id="upiProgressBar"></span></div><p class="muted" id="upiStatusDetail">Extracting transactions locally.</p></div>
  <div class="card" id="upiReview" hidden>
@@ -579,15 +579,15 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
  const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function updateCount(){$id('upiCount').textContent=parsed.filter(x=>x.selected&&!x.excluded&&!x.duplicate&&x.direction!=='credit').length+' selected'}
  async function handleFile(file){
-  if(!file)return;$id('upiReview').hidden=true;$id('upiProgress').hidden=false;$id('upiProgressBar').style.width='0%';$id('upiStatus').textContent='Reading '+file.name;
+  if(!file)return;$id('upiFileName').textContent='Selected: '+file.name+' ('+(file.size/1024/1024).toFixed(2)+' MB)';$id('upiDrop').classList.add('is-reading');$id('upiReview').hidden=true;$id('upiProgress').hidden=false;$id('upiProgressBar').style.width='3%';$id('upiStatus').textContent='Reading '+file.name;$id('upiStatusDetail').textContent='Preparing your statement…';
   try{let rows;if(file.name.toLowerCase().endsWith('.pdf'))rows=await parsePDF(file);else rows=await parseExcel(file);
-   if(!rows.length)throw new Error('No transactions could be read. Please use the original Paytm PDF or Excel statement, not a screenshot.');
-   showReview(rows);toast('Statement read. Please review before importing.');
-  }catch(e){$id('upiProgress').hidden=true;toast('Could not read statement: '+e.message)}
+   if(!rows.length)throw new Error('No transactions were detected. Please upload the original Paytm PDF, Excel or CSV statement.');
+   showReview(rows);$id('upiFileName').textContent='Ready to review: '+file.name+' · '+rows.length+' transactions found';toast('Statement read. Review the transactions below.');
+  }catch(e){$id('upiProgress').hidden=true;$id('upiFileName').textContent='Could not read '+file.name+'. '+(e?.message||'Unknown error')+' Choose the file again to retry.';toast('Import error: '+(e?.message||'Could not read file'));console.error('Pocket statement import failed',e)}finally{$id('upiDrop').classList.remove('is-reading')}
  }
- $id('upiFile').addEventListener('change',e=>handleFile(e.target.files[0]));
+ $id('upiFile').addEventListener('change',e=>{const file=e.target.files?.[0];handleFile(file)});
  $id('upiDrop').addEventListener('dragover',e=>{e.preventDefault();$id('upiDrop').style.borderColor='#6558e8'});
- $id('upiDrop').addEventListener('drop',e=>{e.preventDefault();$id('upiDrop').style.borderColor='';handleFile(e.dataTransfer.files[0])});
+ $id('upiDrop').addEventListener('drop',e=>{e.preventDefault();$id('upiDrop').style.borderColor='';const file=e.dataTransfer.files?.[0];if(file)handleFile(file)});
  $id('upiSelectAll').onchange=e=>{parsed.forEach(x=>{if(!x.excluded&&!x.duplicate&&x.direction!=='credit')x.selected=e.target.checked});document.querySelectorAll('[data-import-check]').forEach(c=>{if(!c.disabled)c.checked=e.target.checked});updateCount()};
  $id('upiCancel').onclick=()=>{$id('upiReview').hidden=true;$id('upiFile').value='';parsed=[]};
  $id('upiImportBtn').onclick=async()=>{
