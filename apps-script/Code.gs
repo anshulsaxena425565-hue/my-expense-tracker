@@ -57,7 +57,7 @@ function verifyGoogleToken_(token) {
   const now = Math.floor(Date.now() / 1000);
   if (claims.aud !== clientId || !claims.sub || Number(claims.exp) <= now ||
       !['accounts.google.com', 'https://accounts.google.com'].includes(claims.iss) ||
-      claims.email_verified !== 'true') {
+      !(claims.email_verified === 'true' || claims.email_verified === true)) {
     throw new Error('Google identity could not be verified. Please sign in again.');
   }
   return { sub: claims.sub };
