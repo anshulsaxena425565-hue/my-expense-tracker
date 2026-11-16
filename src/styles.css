@@ -283,3 +283,15 @@ input:focus,select:focus,textarea:focus{border-color:#7772df;box-shadow:0 0 0 3p
  .analytics-grid .recharts-cartesian-axis-tick text{font-size:9px}
  .analytics-footnote{font-size:9px}
 }
+
+/* Pocket identity refresh — quiet, precise, memorable */
+.brand{display:flex;align-items:center;gap:10px;font-family:Manrope,sans-serif;font-size:23px;font-weight:750;letter-spacing:-1.1px;color:inherit}
+.brand-mark{width:37px;height:37px;display:grid;place-items:center;flex:0 0 37px;border-radius:12px;background:#dce9dc;color:#234f3c;box-shadow:inset 0 0 0 1px #234f3c12}
+.brand-mark svg{display:block;width:31px;height:31px}
+.brand-word{line-height:1;color:inherit}
+.side .brand{margin:0 0 30px}
+.side .brand-mark{background:#dcebd1;color:#214a39}
+.authbox .brand{margin:0 0 15px;color:#1c3029}
+.authbox .brand-mark{background:#e1ecdb;color:#28563f}
+.loading{position:relative}
+@media(max-width:700px){.side .brand{display:flex;margin:0 8px 0 0;font-size:18px;gap:7px}.side .brand-mark{width:29px;height:29px;flex-basis:29px;border-radius:9px}.side .brand-mark svg{width:25px;height:25px}}
