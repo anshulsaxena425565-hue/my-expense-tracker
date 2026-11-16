@@ -137,6 +137,87 @@ button:focus-visible,a:focus-visible{outline:3px solid #9ba9ff;outline-offset:3p
  .stat-value{font-size:18px!important}
 }
 </style>
+
+<style id="pocket-dashboard-polish">
+/* Cohesive dashboard finishing pass */
+:root{--bg:#f3f5f9;--panel:#fff;--ink:#17243b;--muted:#748197;--line:#e5eaf2;--brand:#5968df;--green:#16866b;--red:#d85c68;--shadow:0 8px 28px rgba(30,48,82,.055)}
+body{background:#f3f5f9;color:var(--ink)}
+.app{grid-template-columns:264px minmax(0,1fr)}
+.sidebar{background:linear-gradient(180deg,#1c2948 0%,#17233e 100%);padding:28px 17px;gap:28px}
+.brand{font-size:24px;letter-spacing:-.7px}
+.brand-mark{background:linear-gradient(140deg,#ffcf76,#f49b78);color:#493a45}
+.nav-label{color:#9aa9c3;font-size:10px;letter-spacing:1.6px}
+.nav button{min-height:44px;border-radius:12px;color:#c1cadd;transition:background .18s,color .18s}
+.nav button.active{background:linear-gradient(100deg,#ffffff1b,#ffffff0c);color:#fff;box-shadow:inset 3px 0 #a9b5ff}
+.nav button:hover{background:#ffffff13;color:#fff}
+.nav .ico{color:#aebcff}
+.main{max-width:1720px;padding:30px clamp(22px,2.7vw,48px) 48px}
+.topbar{margin-bottom:26px}
+.welcome h1{font-size:26px;letter-spacing:-.6px}
+.welcome p{font-size:13px}
+.card{border:1px solid #e3e9f2;border-radius:19px;box-shadow:0 8px 26px rgba(31,49,82,.045);padding:22px}
+.stats{gap:16px;margin-bottom:16px}
+.stat-value{letter-spacing:-.8px}
+.charts{gap:16px;margin-bottom:16px}
+.lower{gap:16px}
+.card-head h2{font-size:16px;letter-spacing:-.2px}
+.chart-wrap{height:260px}
+.method{background:#edf2ff;color:#5068b5}
+.category-dot{background:#edf2ff;color:#586fce}
+.profile{gap:11px;background:#ffffff12;border:1px solid #ffffff0c}
+.profile>div:last-child{min-width:0;flex:1}
+.profile strong,.profile small{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile small{font-size:11px}
+.logout-btn{display:flex!important;align-items:center;justify-content:center;gap:9px;border:1px solid #ffffff20!important;background:#ffffff0d!important;color:#dce5f5!important;border-radius:11px!important;padding:11px 13px!important;font-size:13px;font-weight:700!important;cursor:pointer}
+.logout-btn:hover{background:#ffffff18!important}
+.link-btn{color:#5368dc}
+.table-wrap{border-radius:10px}
+table{min-width:620px}
+th{letter-spacing:.7px}
+td{height:54px}
+.empty{padding:42px 14px}
+#page-investments .section-title{margin:2px 0 20px}
+#page-investments .investment-stats{margin-bottom:18px}
+#page-investments .card-head{align-items:center}
+#investmentFormCard{scroll-margin-top:18px}
+#investmentFormCard .form-grid{margin-top:6px}
+#investmentFormCard .field input,#investmentFormCard .field select,#investmentFormCard .field textarea{min-height:43px}
+#investmentFormCard .form-actions .primary{min-width:170px}
+#page-investments .card[style*="background"]{border-color:#e1e8f7}
+button,select,input,textarea{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #a9b5ff;outline-offset:2px}
+@media(max-width:1100px){.app{grid-template-columns:225px minmax(0,1fr)}.main{padding:24px 22px 40px}.charts{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}}
+@media(max-width:760px){
+ .app{display:block!important}
+ .sidebar{width:min(84vw,292px);padding:25px 17px;transform:translateX(-110%);left:0}
+ .sidebar.open{transform:translateX(0)}
+ .main{padding:17px 14px calc(36px + env(safe-area-inset-bottom))!important}
+ .topbar{gap:12px;margin-bottom:18px}
+ .topbar>div:first-child{flex:1 1 100%;width:100%}
+ .top-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;width:100%;gap:8px}
+ .top-actions .select{max-width:none;width:100%;min-height:44px}
+ .top-actions .primary{min-height:44px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}
+ .card{padding:15px;border-radius:16px}
+ .stat-value{font-size:clamp(18px,4.8vw,23px);white-space:normal;overflow-wrap:anywhere}
+ .charts,.lower{grid-template-columns:minmax(0,1fr)!important;gap:11px}
+ .chart-wrap{height:230px}
+ .section-title{align-items:flex-start;gap:12px}
+ .section-title h1{font-size:21px}
+ #page-investments .section-title .primary{white-space:nowrap}
+ #page-investments .investment-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #investmentFormCard .form-grid{grid-template-columns:minmax(0,1fr)}
+ #investmentFormCard .field.full{grid-column:auto}
+ .table-wrap{max-width:100%;overflow-x:auto}
+}
+@media(max-width:390px){
+ .main{padding-left:11px!important;padding-right:11px!important}
+ .stats{gap:8px}
+ .card{padding:12px}
+ .stat-value{font-size:18px}
+ .top-actions .primary{padding:10px 11px;font-size:12px}
+}
+</style>
 </head>
 <body>
 <div id="auth" class="auth-screen">
@@ -150,7 +231,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #9ba9ff;outline-offset:3p
 <aside class="sidebar" id="sidebar"><div class="brand"><span class="brand-mark"><i class="ph ph-wallet"></i></span> pocket.</div>
  <div><div class="nav-label">WORKSPACE</div><nav class="nav"><button class="active" data-page="overview"><span class="ico"><i class="ph ph-squares-four"></i></span> Overview</button><button data-page="transactions"><span class="ico"><i class="ph ph-arrows-down-up"></i></span> Transactions</button><button data-page="analytics"><span class="ico"><i class="ph ph-chart-line-up"></i></span> Analytics</button><button data-page="investments"><span class="ico"><i class="ph ph-chart-presentation-chart"></i></span> Investments</button></nav></div>
  <div><div class="nav-label">PREFERENCES</div><nav class="nav"><button data-page="settings"><span class="ico"><i class="ph ph-gear"></i></span> Settings</button></nav></div>
- <div class="side-bottom"><div class="profile"><div class="avatar" id="sideAvatar">A</div><div style="min-width:0"><strong id="sideName">Your account</strong><small id="sideEmail">you@example.com</small></div></div><button class="nav" id="logout" style="width:100%;margin-top:10px"><span class="ico"><i class="ph ph-sign-out"></i></span> Sign out</button></div>
+ <div class="side-bottom"><div class="profile"><div class="avatar" id="sideAvatar">A</div><div style="min-width:0"><strong id="sideName">Your account</strong><small id="sideEmail">you@example.com</small></div></div><button class="nav" id="logout" class="logout-btn" style="width:100%;margin-top:10px"><span class="ico"><i class="ph ph-sign-out"></i></span> Sign out</button></div>
 </aside>
 <main class="main">
  <header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="icon-btn mobile-menu" id="menuBtn"><i class="ph ph-list"></i></button><div class="welcome"><h1 id="greeting">Good evening 👋</h1><p id="todayLabel">Here's your money snapshot.</p></div></div><div class="top-actions"><select class="select" id="periodSelect" aria-label="Dashboard period"><option value="month">This month</option><option value="year">This year</option><option value="all">All time</option></select><button class="primary" id="addBtn">＋ Add expense</button></div></header>
@@ -190,7 +271,8 @@ button:focus-visible,a:focus-visible{outline:3px solid #9ba9ff;outline-offset:3p
 <div class="card"><div class="card-head"><div><h2>Your portfolio</h2><p>Update current values whenever you review your statements.</p></div><select class="select" id="investmentFilter"><option value="">All asset types</option></select></div>
 <div class="table-wrap"><table><thead><tr><th>Investment</th><th>Type</th><th>Invested</th><th>Current value</th><th>Returns</th><th>Status</th><th></th></tr></thead><tbody id="investmentRows"></tbody></table><div class="empty" id="investmentEmpty">No investments yet. Add your first one to start tracking your portfolio.</div></div></div>
 <div class="card" style="margin-top:16px;background:#f4f7ff"><strong style="font-size:13px">A note on values</strong><p class="muted" style="font-size:12px;line-height:1.6;margin:6px 0 0">Pocket does not fetch live market prices or provide investment advice. Current values are the figures you enter manually. Returns shown are simple unrealised gain/loss, not annualised returns and not adjusted for taxes, fees or cash flows.</p></div>
-</section>\n<section class="page" id="page-analytics"><div class="section-title"><h1>Analytics</h1><select class="select" id="analyticsYear"></select></div><div class="grid stats"><div class="card"><div class="stat-top">Yearly spend <span class="stat-icon"><i class="ph ph-currency-inr"></i></span></div><div class="stat-value" id="yearSpent">₹0</div><div class="stat-foot">Selected year</div></div><div class="card"><div class="stat-top">Monthly average <span class="stat-icon"><i class="ph ph-clock"></i></span></div><div class="stat-value" id="yearAvg">₹0</div><div class="stat-foot">Across 12 months</div></div><div class="card"><div class="stat-top">Highest month <span class="stat-icon"><i class="ph ph-trend-up"></i></span></div><div class="stat-value" id="highestMonth" style="font-size:19px">—</div><div class="stat-foot" id="highestValue">₹0</div></div><div class="card"><div class="stat-top">Top payment <span class="stat-icon"><i class="ph ph-credit-card"></i></span></div><div class="stat-value" id="topPayment" style="font-size:19px">—</div><div class="stat-foot">Most used payment method</div></div></div><div class="grid charts"><div class="card"><div class="card-head"><div><h2>Monthly comparison</h2><p>How your spend changes through the year</p></div></div><div class="chart-wrap"><canvas id="yearChart"></canvas></div></div><div class="card"><div class="card-head"><div><h2>Payment methods</h2><p>How you paid</p></div></div><div class="chart-wrap"><canvas id="paymentChart"></canvas></div></div></div><div class="card"><div class="card-head"><div><h2>Year at a glance</h2><p>Every month's total expenses</p></div></div><div class="table-wrap"><table><thead><tr><th>Month</th><th>Transactions</th><th>Total spent</th></tr></thead><tbody id="monthRows"></tbody></table></div></div></section>
+</section>
+<section class="page" id="page-analytics"><div class="section-title"><h1>Analytics</h1><select class="select" id="analyticsYear"></select></div><div class="grid stats"><div class="card"><div class="stat-top">Yearly spend <span class="stat-icon"><i class="ph ph-currency-inr"></i></span></div><div class="stat-value" id="yearSpent">₹0</div><div class="stat-foot">Selected year</div></div><div class="card"><div class="stat-top">Monthly average <span class="stat-icon"><i class="ph ph-clock"></i></span></div><div class="stat-value" id="yearAvg">₹0</div><div class="stat-foot">Across 12 months</div></div><div class="card"><div class="stat-top">Highest month <span class="stat-icon"><i class="ph ph-trend-up"></i></span></div><div class="stat-value" id="highestMonth" style="font-size:19px">—</div><div class="stat-foot" id="highestValue">₹0</div></div><div class="card"><div class="stat-top">Top payment <span class="stat-icon"><i class="ph ph-credit-card"></i></span></div><div class="stat-value" id="topPayment" style="font-size:19px">—</div><div class="stat-foot">Most used payment method</div></div></div><div class="grid charts"><div class="card"><div class="card-head"><div><h2>Monthly comparison</h2><p>How your spend changes through the year</p></div></div><div class="chart-wrap"><canvas id="yearChart"></canvas></div></div><div class="card"><div class="card-head"><div><h2>Payment methods</h2><p>How you paid</p></div></div><div class="chart-wrap"><canvas id="paymentChart"></canvas></div></div></div><div class="card"><div class="card-head"><div><h2>Year at a glance</h2><p>Every month's total expenses</p></div></div><div class="table-wrap"><table><thead><tr><th>Month</th><th>Transactions</th><th>Total spent</th></tr></thead><tbody id="monthRows"></tbody></table></div></div></section>
  <section class="page" id="page-settings"><div class="section-title"><h1>Settings</h1></div><div class="grid" style="max-width:700px"><div class="card"><h2 style="font:700 16px Manrope;margin-top:0">Profile</h2><div class="form-grid"><div class="field"><label>Name</label><input id="settingName"></div><div class="field"><label>Email</label><input id="settingEmail" disabled></div></div><button class="primary" id="saveProfile" style="margin-top:15px">Save profile</button></div><div class="card"><h2 style="font:700 16px Manrope;margin-top:0">Your data</h2><p class="muted" style="font-size:13px;line-height:1.6">Expenses are synced to your private Appwrite account across devices. Export a backup any time. Import it after signing in to restore your records.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="secondary" id="exportBtn">↓ Export my expenses</button><label class="secondary" style="cursor:pointer">↑ Import backup<input id="importFile" type="file" accept="application/json" hidden></label></div></div><div class="card"><h2 style="font:700 16px Manrope;margin-top:0">Privacy & account</h2><p class="muted" style="font-size:13px">Your Appwrite account controls access to your Pocket records. Sign out when finished on a shared device.</p><button class="secondary" id="settingsLogout">Sign out</button></div></div></section>
 </main></div>
 <div class="modal-backdrop" id="expenseModal"><div class="modal expense-modal"><div class="expense-modal-head"><div><div class="eyebrow">POCKET · QUICK ADD</div><h2 id="modalTitle">Add an expense</h2><p>Every little spend, in its place.</p></div><button type="button" class="modal-close" id="closeExpense" aria-label="Close">×</button></div><form id="expenseForm"><div class="amount-entry"><label for="expenseAmount">How much did you spend?</label><div class="amount-input-wrap"><span>₹</span><input id="expenseAmount" required type="number" min=".01" step=".01" placeholder="0" inputmode="decimal"></div></div><div class="field expense-name-field"><label for="expenseName">What was it for?</label><input id="expenseName" required maxlength="80" placeholder="e.g. Coffee with friends"></div><div class="category-heading"><label>Pick a category</label><span>Tap one to select</span></div><div id="categoryChips" class="category-chips"></div><div class="custom-category-row"><button type="button" class="custom-category-toggle" id="toggleCustomCategory">＋ Create your own category</button><div class="custom-category-entry" id="customCategoryEntry" hidden><input id="customCategoryName" maxlength="40" placeholder="Name your category…" aria-label="New category name"><button type="button" class="primary small-primary" id="addCustomCategory">Add</button></div></div><select id="expenseCategory" required aria-hidden="true" tabindex="-1"></select><div class="expense-meta-grid"><div class="field"><label for="expenseMethod">Paid with</label><select id="expenseMethod" required><option>UPI</option><option>Card</option><option>Cash</option><option>Net Banking</option><option>Other</option></select></div><div class="field"><label for="expenseDate">When</label><input id="expenseDate" type="datetime-local" required></div></div><details class="extra-details"><summary>＋ Add a note <span>Optional</span></summary><textarea id="expenseNotes" rows="2" maxlength="250" placeholder="Anything you want to remember…"></textarea></details><div class="form-actions"><button type="button" class="secondary" id="cancelModal">Cancel</button><button class="primary save-expense-btn" id="saveExpense">Save expense <span>→</span></button></div></form></div></div>
