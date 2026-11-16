@@ -332,7 +332,7 @@ input,select,textarea{accent-color:#6558e8}
 </div>
 <div id="app" class="app" style="display:none">
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div><aside class="sidebar" id="sidebar"><div class="brand"><span class="brand-mark"><i class="ph ph-wallet"></i></span> pocket.</div>
- <div><div class="nav-label">WORKSPACE</div><nav class="nav"><button class="active" data-page="overview"><span class="ico"><i class="ph ph-squares-four"></i></span> Overview</button><button data-page="transactions"><span class="ico"><i class="ph ph-arrows-down-up"></i></span> Transactions</button><button data-page="analytics"><span class="ico"><i class="ph ph-chart-line-up"></i></span> Analytics</button><button data-page="investments"><span class="ico"><i class="ph ph-chart-presentation-chart"></i></span> Investments</button></nav></div>
+ <div><div class="nav-label">WORKSPACE</div><nav class="nav"><button class="active" data-page="overview"><span class="ico"><i class="ph ph-squares-four"></i></span> Overview</button><button data-page="transactions"><span class="ico"><i class="ph ph-arrows-down-up"></i></span> Transactions</button><button data-page="analytics"><span class="ico"><i class="ph ph-chart-line-up"></i></span> Analytics</button><button data-page="investments"><span class="ico"><i class="ph ph-chart-presentation-chart"></i></span> Investments</button><button data-page="imports"><span class="ico"><i class="ph ph-file-arrow-up"></i></span> Import statement</button></nav></div>
  <div><div class="nav-label">PREFERENCES</div><nav class="nav"><button data-page="settings"><span class="ico"><i class="ph ph-gear"></i></span> Settings</button></nav></div>
  <div class="side-bottom"><div class="profile"><div class="avatar" id="sideAvatar">A</div><div style="min-width:0"><strong id="sideName">Your account</strong><small id="sideEmail">you@example.com</small></div></div><button class="nav logout-btn" id="logout" style="width:100%;margin-top:10px"><span class="ico"><i class="ph ph-sign-out"></i></span> Sign out</button></div>
 </aside>
@@ -499,7 +499,7 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
   const credit=direction==='credit'||/received from|money received|unblocked/.test(text);
   const merchant=String(d).replace(/^(paid to|money sent to|sent to|received from|transferred to self|paid for)\s*/i,'').trim();
   const tag=raw.tag||'';
-  const category=raw.category||guessCategory(merchant,tag,raw.upi||'');
+  const tagName=String(tag).replace(/^#\\s*/,'').trim().toLowerCase();const tagMap={'food':'Food & Drinks','groceries':'Groceries','taxi':'Transport','travel':'Transport','shopping':'Shopping','medical':'Health','bill payments':'Bills & Utilities','gifts':'Gifts','parking':'Transport','services':'Services','miscellaneous':'Other'};const category=raw.category||tagMap[tagName]||guessCategory(merchant,tag,raw.upi||'');
   const personTransfer=/money sent to|transfer/.test(text)&&!self&&!category;
   return {...raw,name:merchant||d,amount:absolute,direction:credit?'credit':'debit',category:category||'Needs review',needsReview:!excluded&&!credit&&(!category||personTransfer),excluded,ref,method:'UPI',date:raw.date||new Date().toISOString(),selected:!excluded&&!credit,reason:excluded?'Internal transfer / hold / reversal':credit?'Money received':(!category?'Category needs confirmation':'')};
  }
@@ -509,7 +509,7 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
   for(let i=0;i<lines.length;i++){
    const line=lines[i];
    const dm=line.match(/^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*(?:'?(\d{2,4}))?\s*(.*)$/i);
-   if(dm){flush();const year=dm[3]?(dm[3].length===2?'20'+dm[3]:dm[3]):(new Date().getFullYear());lastDate=dm[1]+' '+dm[2]+' '+year;cur={description:dm[4]||'',dateText:lastDate,tag:'',amount:null,ref:''};continue}
+   if(dm){flush();const year=dm[3]?(dm[3].length===2?'20'+dm[3]:dm[3]):(new Date().getFullYear());lastDate=dm[1]+' '+dm[2]+' '+year;cur={description:dm[4]||'',dateText:lastDate,date:new Date(Number(year),new Date(dm[2]+' 1, 2000').getMonth(),Number(dm[1])).toISOString(),tag:'',amount:null,ref:''};continue}
    if(!cur)continue;
    if(/UPI Ref No\s*:/i.test(line)){cur.ref=(line.match(/UPI Ref No\s*:\s*(\d+)/i)||[])[1]||'';continue}
    if(/UPI ID\s*:/i.test(line)){cur.upi=line.replace(/^.*?UPI ID\s*:\s*/i,'');continue}
