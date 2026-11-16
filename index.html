@@ -21,7 +21,95 @@ body{background:var(--bg)}.sidebar{background:#142d27}.brand-mark{background:lin
 .amount-entry{background:#f2f5eb;border:1px solid #e6ecdc;border-radius:18px;padding:14px 18px;margin-bottom:16px}.amount-entry>label,.expense-name-field>label,.category-heading>label{font-size:12px;font-weight:800;color:#52675a}.amount-input-wrap{display:flex;align-items:center;gap:8px;margin-top:3px}.amount-input-wrap>span{font:700 25px Manrope;color:#78916d}.amount-input-wrap input{width:100%;border:0!important;outline:0;background:transparent;font:800 34px Manrope;color:#193a2d;padding:0;box-shadow:none!important}.amount-input-wrap input::placeholder{color:#bdc8b8}
 .expense-name-field{margin-bottom:18px}.expense-name-field input{margin-top:7px;border-radius:12px;padding:13px 14px;background:#fff;border-color:#e5e9df}.category-heading{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}.category-heading span{font-size:11px;color:#98a49a}.category-chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.category-chip{min-width:0;border:1px solid #e8ebe3;background:#fff;border-radius:13px;padding:10px 5px 9px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#64746a;transition:.16s}.category-chip .chip-icon{width:34px;height:34px;border-radius:11px;background:#f1f4ec;display:grid;place-items:center;font-size:18px;color:#52775c}.category-chip .chip-label{font-size:10px;font-weight:700;line-height:1.2;text-align:center;overflow-wrap:anywhere}.category-chip.selected{border-color:#4e9468;background:#f0f7ec;box-shadow:0 0 0 2px #4e94661c;color:#285c3b}.category-chip.selected .chip-icon{background:#dceecf;color:#286344}.custom-category-row{margin:10px 0 16px}.custom-category-toggle{border:0;background:transparent;color:#28744d;font-size:12px;font-weight:800;padding:5px 0}.custom-category-entry{display:flex;gap:8px;margin-top:8px}.custom-category-entry[hidden]{display:none}.custom-category-entry input{flex:1;min-width:0;border:1px solid #dfe7da;border-radius:10px;padding:10px 12px}.small-primary{padding:9px 14px;border-radius:10px}.expense-modal #expenseCategory{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.expense-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.expense-meta-grid .field select,.expense-meta-grid .field input{margin-top:7px;border-radius:11px;padding:11px 10px;background:#fff;border-color:#e5e9df;font-size:12px}.extra-details{margin-top:13px;border-top:1px solid #edf0e9;padding-top:12px}.extra-details summary{cursor:pointer;list-style:none;color:#397552;font-size:12px;font-weight:800}.extra-details summary::-webkit-details-marker{display:none}.extra-details summary span{float:right;color:#a1aaa1;font-weight:500}.extra-details textarea{margin-top:10px;border-radius:11px;border-color:#e5e9df;resize:vertical}.expense-modal .form-actions{margin-top:20px;align-items:center}.save-expense-btn{min-width:155px;padding:13px 17px;border-radius:12px}.save-expense-btn span{margin-left:10px;font-size:17px}.expense-modal .secondary{border-radius:12px;padding:12px 16px}.category-chip:focus-visible,.custom-category-toggle:focus-visible,.modal-close:focus-visible{outline:3px solid #9bc58c;outline-offset:2px}
 @media(max-width:520px){.expense-modal{padding:22px 17px 18px;border-radius:22px}.expense-modal-head h2{font-size:22px}.category-chips{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.category-chip{padding:9px 4px}.category-chip .chip-icon{width:32px;height:32px}.category-chip .chip-label{font-size:10px}.expense-meta-grid{gap:8px}.amount-input-wrap input{font-size:31px}}
-</style></head>
+</style>
+<style id="pocket-responsive-refresh">
+/* Pocket visual system */
+:root{--bg:#f2f5fb;--panel:#ffffff;--ink:#18243b;--muted:#718096;--line:#e5eaf3;--brand:#5367e8;--brand2:#8a65e8;--green:#159b78;--red:#e05b70;--shadow:0 12px 32px rgba(36,54,92,.07)}
+body{background:linear-gradient(145deg,#f5f7fc 0%,#f0f4fb 52%,#f8f3fb 100%);min-height:100vh}
+.sidebar{background:linear-gradient(180deg,#202c50 0%,#17233f 100%)}
+.brand-mark{background:linear-gradient(135deg,#ffcf70,#ff8c76);color:#3c3152;box-shadow:0 7px 18px #ffad6833}
+.primary{background:linear-gradient(135deg,#5a6eea,#7859d9);box-shadow:0 7px 18px #665fe533}
+.primary:hover{background:linear-gradient(135deg,#485bd1,#6848c7)}
+.card{border:1px solid rgba(220,228,242,.9);box-shadow:0 10px 30px rgba(39,57,96,.055)}
+.stats .card:nth-child(1) .stat-icon{background:#fff0df;color:#e58b32}
+.stats .card:nth-child(2) .stat-icon{background:#e8f0ff;color:#527be0}
+.stats .card:nth-child(3) .stat-icon{background:#e5f7f0;color:#159b78}
+.stats .card:nth-child(4) .stat-icon{background:#f4eaff;color:#9560d8}
+.category-dot{background:#edf2ff;color:#586fce}
+.method{background:#edf4ff;color:#536eae}
+.auth-screen{background:radial-gradient(circle at 12% 12%,#ffe8d3,transparent 30%),radial-gradient(circle at 88% 85%,#e7dcff,transparent 32%),#f3f6fc}
+.auth-card{border:1px solid #e8eaf4}
+.mobile-menu{align-items:center;justify-content:center;width:42px;height:42px;padding:0}
+button,select,input{touch-action:manipulation}
+button:focus-visible,a:focus-visible{outline:3px solid #9ba9ff;outline-offset:3px}
+.table-wrap{max-width:100%;overscroll-behavior-x:contain}
+.table-wrap table{min-width:590px}
+@media(max-width:1100px){
+ .app{grid-template-columns:205px minmax(0,1fr)}
+ .main{padding:22px 20px 38px}
+ .charts{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+ .lower{grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr)}
+}
+@media(max-width:760px){
+ .app{display:block;min-height:100dvh}
+ .sidebar{position:fixed;z-index:50;left:0;top:0;bottom:0;width:min(82vw,290px);transform:translateX(-110%);transition:transform .25s ease;box-shadow:18px 0 45px #17233f35;padding:24px 17px}
+ .sidebar.open{left:0;transform:translateX(0)}
+ .main{width:100%;max-width:none;padding:16px 13px calc(34px + env(safe-area-inset-bottom))}
+ .topbar{display:flex;align-items:center;flex-wrap:wrap;gap:13px;margin-bottom:17px}
+ .topbar>div:first-child{min-width:0;flex:1}
+ .welcome{min-width:0}
+ .welcome h1{font-size:clamp(18px,5vw,22px);line-height:1.2}
+ .welcome p{font-size:11px;line-height:1.4}
+ .top-actions{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+ .top-actions .select{width:100%;max-width:none;min-height:43px}
+ .top-actions .primary{min-height:43px;padding:10px 13px;white-space:nowrap;font-size:13px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+ .card{min-width:0;padding:14px;border-radius:16px}
+ .stat-top{font-size:11px;gap:6px}
+ .stat-icon{width:31px;height:31px;flex:0 0 31px}
+ .stat-value{font-size:clamp(17px,4.8vw,22px);margin:13px 0 4px;overflow-wrap:anywhere}
+ .stat-foot{font-size:10px;line-height:1.35}
+ .charts,.lower{grid-template-columns:minmax(0,1fr);gap:11px;margin-bottom:12px}
+ .chart-wrap{height:220px;max-width:100%}
+ .card-head{margin-bottom:13px}
+ .card-head h2{font-size:15px}
+ .card-head p{font-size:11px}
+ .section-title{gap:10px;align-items:center}
+ .section-title h1{font-size:21px}
+ .section-title .primary{white-space:nowrap;padding:10px 12px;font-size:12px}
+ .filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .filters input,.filters select{width:100%;max-width:none;min-width:0;min-height:42px;font-size:12px}
+ .filters input{grid-column:1/-1}
+ .table-wrap{margin:0 -4px;padding-bottom:4px}
+ th{padding:10px 9px;font-size:10px}
+ td{padding:12px 9px;font-size:12px}
+ .expense-name{gap:7px}
+ .expense-name .category-dot{width:29px;height:29px;flex:0 0 29px}
+ .modal-backdrop{padding:8px;align-items:flex-end}
+ .modal{width:100%;max-height:min(92dvh,850px);border-radius:22px 22px 14px 14px;padding:20px 16px}
+ .expense-modal{width:100%;max-height:94dvh;padding:20px 15px 16px;border-radius:22px 22px 14px 14px}
+ .expense-modal-head h2{font-size:21px}
+ .form-grid{grid-template-columns:minmax(0,1fr)}
+ .field.full{grid-column:auto}
+ .toast{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));text-align:center}
+ .auth-screen{padding:14px;min-height:100dvh}
+ .auth-card{padding:25px 20px;border-radius:22px}
+}
+@media(max-width:390px){
+ .main{padding-left:10px;padding-right:10px}
+ .stats{gap:8px}
+ .card{padding:12px}
+ .stat-value{font-size:17px}
+ .top-actions .primary{font-size:12px;padding:9px 10px}
+ .category-chips{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .expense-meta-grid{grid-template-columns:minmax(0,1fr)}
+ .expense-meta-grid .field select,.expense-meta-grid .field input{font-size:14px;min-height:43px}
+ .form-actions{display:grid;grid-template-columns:1fr 1.4fr}
+ .form-actions button{width:100%}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
 <body>
 <div id="auth" class="auth-screen">
  <div class="auth-card"><div class="auth-brand"><span class="brand-mark"><i class="ph ph-wallet"></i></span> pocket<span style="color:var(--brand)">.</span></div>
