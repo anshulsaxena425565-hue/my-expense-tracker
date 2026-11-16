@@ -13,14 +13,22 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const chunks = [];
-    for await (const chunk of req) {
-      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-      if (chunks.reduce((n, c) => n + c.length, 0) > 2 * 1024 * 1024) {
-        return res.status(413).json({ ok: false, error: 'Request is too large.' });
+    let body;
+    if (req.body && typeof req.body === 'object') {
+      body = JSON.stringify(req.body);
+    } else {
+      const chunks = [];
+      let total = 0;
+      for await (const chunk of req) {
+        const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+        total += buffer.length;
+        if (total > 2 * 1024 * 1024) {
+          return res.status(413).json({ ok: false, error: 'Request is too large.' });
+        }
+        chunks.push(buffer);
       }
+      body = Buffer.concat(chunks).toString('utf8');
     }
-    const body = Buffer.concat(chunks).toString('utf8');
     const parsed = JSON.parse(body || '{}');
     if (!parsed.credential || !['load', 'save'].includes(parsed.action)) {
       return res.status(400).json({ ok: false, error: 'Invalid request.' });
