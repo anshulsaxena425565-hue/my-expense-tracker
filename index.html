@@ -489,7 +489,7 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
  function saveUserRules(rules){localStorage.setItem('pocket_import_rules_'+(user?.$id||'guest'),JSON.stringify(rules))}
  function applyUserRule(payee){const t=norm(payee);return getUserRules().find(r=>r.match&&t.includes(norm(r.match)))||null}
  function renderUserRules(){const box=$id('upiSavedRules');if(!box)return;const rules=getUserRules();box.innerHTML=rules.length?rules.map((r,i)=>'<div class="saved-rule"><div><strong>'+escapeHTML(r.match)+' → '+escapeHTML(r.category)+'</strong><small>Assigned to: '+escapeHTML(r.assignedTo||'Not specified')+'</small></div><button type="button" data-rule-delete="'+i+'">Remove</button></div>').join(''):'<p class="muted">No personal rules yet. Add one above.</p>';box.querySelectorAll('[data-rule-delete]').forEach(b=>b.onclick=()=>{const a=getUserRules();a.splice(+b.dataset.ruleDelete,1);saveUserRules(a);renderUserRules()})}
- $id('upiRuleForm').addEventListener('submit',e=>{e.preventDefault();const match=$id('ruleMatch').value.trim(),category=$id('ruleCategory').value.trim(),assignedTo=$id('ruleAssigned').value.trim();if(!match||!category)return;const rules=getUserRules().filter(r=>norm(r.match)!==norm(match));rules.unshift({match,category,assignedTo});saveUserRules(rules);e.target.reset();renderUserRules();bridge.toast('Import rule saved.')});
+ $id('upiRuleForm').addEventListener('submit',e=>{e.preventDefault();const match=$id('ruleMatch').value.trim(),category=$id('ruleCategory').value.trim(),assignedTo=$id('ruleAssigned').value.trim();if(!match||!category)return;const rules=getUserRules().filter(r=>norm(r.match)!==norm(match));rules.unshift({match,category,assignedTo});saveUserRules(rules);e.target.reset();renderUserRules();bridge.bridge.toast('Import rule saved.')});
  renderUserRules();
  function guessCategory(payee,tag='',upi=''){
   const t=norm(payee+' '+tag+' '+upi);
@@ -599,8 +599,8 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
   if(!file)return;$id('upiFileName').textContent='Selected: '+file.name+' ('+(file.size/1024/1024).toFixed(2)+' MB)';$id('upiDrop').classList.add('is-reading');$id('upiReview').hidden=true;$id('upiProgress').hidden=false;$id('upiProgressBar').style.width='3%';$id('upiStatus').textContent='Reading '+file.name;$id('upiStatusDetail').textContent='Preparing your statement…';
   try{let rows;if(file.name.toLowerCase().endsWith('.pdf'))rows=await parsePDF(file);else rows=await parseExcel(file);
    if(!rows.length)throw new Error('No transactions were detected. Please upload the original Paytm PDF, Excel or CSV statement.');
-   showReview(rows);$id('upiFileName').textContent='Ready to review: '+file.name+' · '+rows.length+' transactions found';toast('Statement read. Review the transactions below.');
-  }catch(e){$id('upiProgress').hidden=true;$id('upiFileName').textContent='Could not read '+file.name+'. '+(e?.message||'Unknown error')+' Choose the file again to retry.';toast('Import error: '+(e?.message||'Could not read file'));console.error('Pocket statement import failed',e)}finally{$id('upiDrop').classList.remove('is-reading')}
+   showReview(rows);$id('upiFileName').textContent='Ready to review: '+file.name+' · '+rows.length+' transactions found';bridge.toast('Statement read. Review the transactions below.');
+  }catch(e){$id('upiProgress').hidden=true;$id('upiFileName').textContent='Could not read '+file.name+'. '+(e?.message||'Unknown error')+' Choose the file again to retry.';bridge.toast('Import error: '+(e?.message||'Could not read file'));console.error('Pocket statement import failed',e)}finally{$id('upiDrop').classList.remove('is-reading')}
  }
  $id('upiFile').addEventListener('change',e=>{const file=e.target.files?.[0];handleFile(file)});
  $id('upiDrop').addEventListener('dragover',e=>{e.preventDefault();$id('upiDrop').style.borderColor='#6558e8'});
@@ -609,11 +609,11 @@ window.PocketImportBridge={get expenses(){return expenses},set expenses(value){e
  $id('upiCancel').onclick=()=>{$id('upiReview').hidden=true;$id('upiFile').value='';parsed=[]};
  $id('upiImportBtn').onclick=async()=>{
   const selected=parsed.filter(x=>x.selected&&!x.excluded&&!x.duplicate&&x.direction!=='credit');
-  if(!selected.length)return toast('Select at least one expense to import.');
+  if(!selected.length)return bridge.toast('Select at least one expense to import.');
   const previous=bridge.expenses.slice(),newItems=selected.map(x=>({id:'e_'+Date.now()+'_'+Math.random().toString(36).slice(2,10),name:String(x.name||'UPI expense').slice(0,80),amount:x.amount,category:x.category||'Other',method:'UPI',date:x.date||new Date().toISOString(),notes:[x.note||'',x.upi?'UPI ID: '+x.upi:'',x.ref?'UPI Ref: '+x.ref:'','Imported from Paytm statement'].filter(Boolean).join(' · '),assignedTo:x.assignedTo||''}));
   $id('upiImportBtn').disabled=true;$id('upiImportBtn').textContent='Importing…';
-  try{bridge.expenses=[...bridge.expenses,...newItems];await bridge.save();bridge.buildFilters();bridge.render();$id('upiReview').hidden=true;$id('upiFile').value='';parsed=[];toast(newItems.length+' bridge.expenses imported successfully.');goPage('transactions')}
-  catch(e){bridge.expenses=previous;toast('Import could not be fully synced: '+e.message)}
+  try{bridge.expenses=[...bridge.expenses,...newItems];await bridge.save();bridge.buildFilters();bridge.render();$id('upiReview').hidden=true;$id('upiFile').value='';parsed=[];bridge.toast(newItems.length+' bridge.expenses imported successfully.');bridge.goPage('transactions')}
+  catch(e){bridge.expenses=previous;bridge.toast('Import could not be fully synced: '+e.message)}
   finally{$id('upiImportBtn').disabled=false;$id('upiImportBtn').textContent='Import selected bridge.expenses'}
  };
 })();
