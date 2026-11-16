@@ -94,3 +94,31 @@ input:focus,select:focus,textarea:focus{border-color:#7772df;box-shadow:0 0 0 3p
 @media(max-width:380px){.actions .btn{padding:8px 7px;font-size:9px}.main h1{font-size:20px}.side button{font-size:8px}}
 
 .data-alert{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:14px 16px;border:1px solid #f1c9c5;background:#fff4f2;color:#8d3934;border-radius:14px;font-size:12px}.data-alert span{flex:1;min-width:200px}.data-alert.subtle{border-color:#f3dfb7;background:#fff9ec;color:#79551d}.data-alert .btn{padding:8px 12px;font-size:11px}
+
+/* Transaction explorer and income intelligence */
+.transaction-filters{display:grid;gap:12px;margin:18px 0 16px}
+.filter-primary{display:grid;grid-template-columns:minmax(220px,1fr) minmax(160px,220px) minmax(145px,180px);gap:9px}
+.filter-primary>select,.filter-grid select,.filter-grid input{width:100%;min-width:0;border:1px solid #e5e6f0;background:#fff;border-radius:11px;padding:11px 12px;color:#24264c;font:inherit;font-size:12px}
+.searchbox{display:flex;align-items:center;gap:9px;border:1px solid #e5e6f0;background:#fff;border-radius:11px;padding:0 12px;color:#7772c9;min-width:0}
+.searchbox input{border:0!important;box-shadow:none!important;outline:0!important;padding:11px 0;min-width:0;width:100%;background:transparent;font:inherit;font-size:12px}
+.advanced-filters{border:1px solid #e9e9f3;border-radius:14px;background:#fbfbff;padding:12px 14px}
+.advanced-filters summary{cursor:pointer;list-style:none;font-size:12px;font-weight:700;color:#3d3b91;display:flex;justify-content:space-between;align-items:center}
+.advanced-filters summary::-webkit-details-marker{display:none}
+.advanced-filters summary:after{content:'＋';font-size:17px;color:#7772c9}
+.advanced-filters[open] summary:after{content:'−'}
+.advanced-filters summary span{margin-left:auto;margin-right:12px;background:#eeedff;color:#4c48b5;border-radius:20px;padding:4px 8px;font-size:10px}
+.filter-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-top:15px}
+.filter-grid label{display:grid;gap:6px;font-size:10px;font-weight:700;color:#747895}
+.filter-grid input,.filter-grid select{font-size:11px;font-weight:500}
+.filter-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:13px;padding-top:11px;border-top:1px solid #ececf4;color:#8185a0;font-size:10px}
+.filter-actions .text{color:#514db4;font-weight:700}
+.income-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:16px 0}
+.income-summary article{display:grid;gap:6px;padding:16px;border:1px solid #e5e6f2;border-radius:15px;background:linear-gradient(135deg,#fff,#f7f7ff)}
+.income-summary small{font-size:10px;color:#777d99}.income-summary b{font-family:Manrope,sans-serif;font-size:22px;letter-spacing:-.5px;color:#26255e}.income-summary span{font-size:10px;color:#8589a2}
+.income-sources{padding:17px;border:1px solid #e9eaf3;border-radius:17px;background:#fff;margin-bottom:16px}
+.source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.source-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 13px;border:1px solid #eeeef6;border-radius:12px;background:#fcfcff}
+.source-row>div{display:grid;gap:4px;min-width:0}.source-row b{font-size:12px;color:#30315e;overflow-wrap:anywhere}.source-row small{font-size:10px;color:#888da5}.source-row strong{font-size:12px;color:#218354;white-space:nowrap}
+.results-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:12px 0;color:#737995;font-size:11px}.results-heading b{color:#292a54;font-size:12px}
+@media(max-width:900px){.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.filter-primary{grid-template-columns:1fr 1fr}.filter-primary .searchbox{grid-column:1/-1}.filter-primary>select{font-size:10px;padding:10px 8px}.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.filter-grid input,.filter-grid select{padding:10px 8px}.income-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.income-summary article:first-child{grid-column:1/-1}.income-summary b{font-size:19px}.source-list{grid-template-columns:1fr}.filter-actions{align-items:flex-start;flex-direction:column}.income-sources{padding:13px}.results-heading{align-items:flex-start;flex-direction:column;gap:4px}}
