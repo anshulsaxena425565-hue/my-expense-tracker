@@ -309,6 +309,18 @@ input,select,textarea{accent-color:#6558e8}
  .topbar{background:rgba(245,247,252,.97)!important;box-shadow:0 5px 16px rgba(32,48,78,.035)!important}
 }
 </style>
+
+<style id="pocket-upi-import-style">
+#imports-placeholder{display:none}
+.import-drop{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1.5px dashed #c9d2e5!important;background:linear-gradient(135deg,#fff,#f6f7ff)!important;gap:10px}
+.import-drop h2{margin:4px 0 0}.import-drop p{color:var(--muted);margin:0 0 8px}.import-drop small{color:var(--muted);font-size:11px;margin-top:7px}
+.import-icon{width:60px;height:60px;border-radius:19px;display:grid;place-items:center;background:#eeedff;color:#6659e8;font-size:28px}
+.import-progress{height:8px;background:#edf0f7;border-radius:9px;overflow:hidden}.import-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#6659e8,#27ae91);transition:width .2s}
+.import-summary{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 18px}.import-summary span,.rule-chips span{background:#f1f3fb;border:1px solid #e6eaf3;padding:9px 12px;border-radius:10px;font-size:12px;color:#4e5d77}
+.import-toolbar,.import-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0}.import-table{min-width:820px}.import-table select{min-width:130px;padding:8px;border:1px solid #e2e7f0;border-radius:8px;background:#fff}.import-table td{vertical-align:middle}.import-table .muted{font-size:11px}
+.import-footer{border-top:1px solid var(--line);margin-top:12px}.rule-chips{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:760px){.import-drop{min-height:220px;padding:24px 15px}.import-toolbar,.import-footer{align-items:flex-start;flex-direction:column}.import-footer .primary{width:100%}}
+</style>
 </head>
 <body>
 <div id="auth" class="auth-screen">
@@ -337,7 +349,25 @@ input,select,textarea{accent-color:#6558e8}
   <div class="grid lower"><div class="card"><div class="card-head"><div><h2>Recent transactions</h2><p>Your latest money moves</p></div><button class="link-btn" data-goto="transactions">See all →</button></div><div class="table-wrap"><table><thead><tr><th>Expense</th><th>Date</th><th>Payment</th><th>Amount</th></tr></thead><tbody id="recentRows"></tbody></table><div class="empty" id="recentEmpty" style="display:none">No expenses yet. Add your first one to get started.</div></div></div><div class="card"><div class="card-head"><div><h2>Top spending</h2><p>By expense category</p></div></div><div class="quick-list" id="topList"></div><div class="empty" id="topEmpty" style="display:none">Your spending categories will show here.</div></div></div>
  </section>
  <section class="page" id="page-transactions"><div class="section-title"><h1>Transactions</h1><button class="primary" id="addBtn2">＋ Add expense</button></div><div class="filters"><input id="searchInput" placeholder="Search expenses…" aria-label="Search expenses"><select id="monthFilter"><option value="">All months</option></select><select id="categoryFilter"><option value="">All categories</option></select><select id="methodFilter"><option value="">All payment methods</option><option>UPI</option><option>Card</option><option>Cash</option><option>Net Banking</option><option>Other</option></select></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Expense</th><th>Date & time</th><th>Category</th><th>Payment</th><th>Amount</th><th></th></tr></thead><tbody id="allRows"></tbody></table><div class="empty" id="allEmpty" style="display:none">No matching expenses found.</div></div></div></section>
- <section class="page" id="page-investments">
+ 
+<section class="page" id="page-imports">
+ <div class="section-title"><div><h1>Import UPI statement</h1><p class="muted" style="margin:6px 0 0;font-size:13px">Upload a Paytm PDF or Excel statement. Pocket will read, categorise and check for duplicates before saving.</p></div></div>
+ <div class="card import-drop" id="upiDrop">
+  <div class="import-icon"><i class="ph ph-files"></i></div><h2>Drop your statement here</h2><p>Paytm PDF statements and Excel files (.xlsx, .xls, .csv)</p>
+  <label class="primary" for="upiFile">Choose statement</label><input id="upiFile" type="file" accept=".pdf,.xlsx,.xls,.csv,application/pdf" hidden>
+  <small>Files are processed in your browser. Your statement is not uploaded to a third-party server.</small>
+ </div>
+ <div class="card" id="upiProgress" hidden><div class="card-head"><h2 id="upiStatus">Reading statement…</h2></div><div class="import-progress"><span id="upiProgressBar"></span></div><p class="muted" id="upiStatusDetail">Extracting transactions locally.</p></div>
+ <div class="card" id="upiReview" hidden>
+  <div class="card-head"><div><h2>Review before importing</h2><p id="upiSummary">Review transactions and categories before saving.</p></div><button class="secondary" id="upiCancel">Cancel</button></div>
+  <div class="import-summary" id="upiStats"></div>
+  <div class="import-toolbar"><label><input type="checkbox" id="upiSelectAll" checked> Select all eligible expenses</label><span id="upiCount"></span></div>
+  <div class="table-wrap"><table class="import-table"><thead><tr><th>Import</th><th>Date</th><th>Payee / description</th><th>Amount</th><th>Category</th><th>Type</th></tr></thead><tbody id="upiRows"></tbody></table></div>
+  <div class="import-footer"><p class="muted" id="upiFootnote">Money received, self-transfers, IPO blocks and reversals are excluded from expenses.</p><button class="primary" id="upiImportBtn">Import selected expenses</button></div>
+ </div>
+ <div class="card" id="upiRules"><div class="card-head"><div><h2>Smart category rules</h2><p>Automatic suggestions based on merchant names. You can change any suggestion before importing.</p></div></div><div class="rule-chips"><span>Blinkit / Instamart → Groceries</span><span>Flipkart Minutes → Groceries</span><span>Zomato / Swiggy → Food & Drinks</span><span>Uber / Rapido → Transport</span><span>Apollo Pharmacy → Health</span></div><p class="muted" style="margin-top:12px;font-size:12px">Unclear person-to-person payments will be marked for your review instead of guessed.</p></div>
+</section>
+<section class="page" id="page-investments">
 <div class="section-title"><div><h1>Investment tracker</h1><p class="muted" style="margin:6px 0 0;font-size:13px">One place for your investment portfolio.</p></div><button class="primary" id="showInvestmentForm">＋ Add investment</button></div>
 <div class="grid stats investment-stats">
 <div class="card"><div class="stat-top">Total invested <span class="stat-icon" style="background:#e8efff;color:#5472d7"><i class="ph ph-wallet"></i></span></div><div class="stat-value" id="invInvested">₹0</div><div class="stat-foot">Amount put in</div></div>
@@ -435,6 +465,124 @@ const closeSidebar=()=>{$('sidebar').classList.remove('open');$('sidebarBackdrop
 $('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({format:'pocket-expenses-v1',exportedAt:new Date().toISOString(),user:{name:user.name,email:user.email},expenses},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pocket-expenses-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exported.')};
 $('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.format!=='pocket-expenses-v1'||!Array.isArray(data.expenses))throw Error('Invalid backup');const valid=data.expenses.filter(x=>x&&typeof x.name==='string'&&Number(x.amount)>0&&x.date&&x.id);const replace=confirm('Import '+valid.length+' expenses? Choose OK to replace your current list, or Cancel to merge.');if(replace)expenses=valid;else{const ids=new Set(expenses.map(x=>x.id));expenses.push(...valid.filter(x=>!ids.has(x.id)))}await save();buildFilters();render();toast('Backup imported and synced.')}catch(err){toast('Could not import this backup file.')}e.target.value=''};
 authView();appwriteReady.then(async()=>{try{user=await account.get();await enterApp()}catch{authView()}}).catch(error=>{toast('Could not connect to Appwrite: '+error.message)});
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script id="pocket-upi-import">
+(()=>{
+ const $id=id=>document.getElementById(id);let parsed=[];
+ const builtIn=['Food & Drinks','Groceries','Transport','Shopping','Bills & Utilities','Health','Entertainment','Travel','Education','Personal Care','Home','Other','Gifts','Money Transfer'];
+ const norm=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+ function guessCategory(payee,tag='',upi=''){
+  const t=norm(payee+' '+tag+' '+upi);
+  if(/blinkit|instamart|flipkart minutes|zepto|bigbasket|grocery|grocer|vegetable|sabzi|kirana|mart|supermarket/.test(t))return 'Groceries';
+  if(/zomato|swiggy|restaurant|cafe|food|tea stall|chaat|kulfi|bikaner|pizza|burger|bakery/.test(t))return 'Food & Drinks';
+  if(/uber|rapido|ola|taxi|cab|metro|railway|irctc|bus/.test(t))return 'Transport';
+  if(/apollo|pharmacy|medical|hospital|clinic|medicare|chemist/.test(t))return 'Health';
+  if(/electricity|water bill|gas bill|broadband|jio|airtel|recharge|bill payment/.test(t))return 'Bills & Utilities';
+  if(/amazon|flipkart|meesho|myntra|shopping/.test(t))return 'Shopping';
+  if(/movie|cinema|netflix|spotify|bookmyshow/.test(t))return 'Entertainment';
+  if(/delhivery|courier|freight|shipping/.test(t))return 'Services';
+  if(/temple|donation|gift/.test(t))return 'Gifts';
+  return '';
+ }
+ function classify(raw){
+  const d=raw.description||raw.name||raw.payee||'UPI payment',text=norm(d+' '+(raw.note||'')+' '+(raw.tag||''));
+  const ref=String(raw.ref||raw.utr||'').trim();
+  const amount=Number(raw.amount);
+  const direction=raw.direction||(amount<0?'debit':amount>0?'credit':'unknown');
+  const absolute=Math.abs(amount);
+  const self=/transferred to self|self transfer/.test(text);
+  const excluded=self||/money blocked|money unblocked|ipo|mandate setup|autopay setup|reversal|refund received/.test(text);
+  const credit=direction==='credit'||/received from|money received|unblocked/.test(text);
+  const merchant=String(d).replace(/^(paid to|money sent to|sent to|received from|transferred to self|paid for)\s*/i,'').trim();
+  const tag=raw.tag||'';
+  const category=raw.category||guessCategory(merchant,tag,raw.upi||'');
+  const personTransfer=/money sent to|transfer/.test(text)&&!self&&!category;
+  return {...raw,name:merchant||d,amount:absolute,direction:credit?'credit':'debit',category:category||'Needs review',needsReview:!excluded&&!credit&&(!category||personTransfer),excluded,ref,method:'UPI',date:raw.date||new Date().toISOString(),selected:!excluded&&!credit,reason:excluded?'Internal transfer / hold / reversal':credit?'Money received':(!category?'Category needs confirmation':'')};
+ }
+ function parsePaytmText(text){
+  const lines=text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),out=[];let cur=null,lastDate='';
+  const flush=()=>{if(cur&&cur.ref&&cur.amount!=null)out.push(classify(cur));cur=null};
+  for(let i=0;i<lines.length;i++){
+   const line=lines[i];
+   const dm=line.match(/^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*(?:'?(\d{2,4}))?\s*(.*)$/i);
+   if(dm){flush();const year=dm[3]?(dm[3].length===2?'20'+dm[3]:dm[3]):(new Date().getFullYear());lastDate=dm[1]+' '+dm[2]+' '+year;cur={description:dm[4]||'',dateText:lastDate,tag:'',amount:null,ref:''};continue}
+   if(!cur)continue;
+   if(/UPI Ref No\s*:/i.test(line)){cur.ref=(line.match(/UPI Ref No\s*:\s*(\d+)/i)||[])[1]||'';continue}
+   if(/UPI ID\s*:/i.test(line)){cur.upi=line.replace(/^.*?UPI ID\s*:\s*/i,'');continue}
+   const am=line.match(/([+-])\s*Rs\.?\s*([\d,]+(?:\.\d{1,2})?)/i);
+   if(am){cur.amount=(am[1]==='-'?-1:1)*Number(am[2].replace(/,/g,''));cur.direction=am[1]==='-'?'debit':'credit';continue}
+   if(/^#/.test(line))cur.tag=line.replace(/^#\s*/,'');
+   if(/Note:/i.test(line))cur.note=(cur.note||'')+' '+line;
+   if(/^(Paid to|Money sent to|Received from|Transferred to Self|Paid for|Money blocked for|Money unblocked for|Automatic payment)/i.test(line))cur.description+=(cur.description?' ':'')+line;
+  }
+  flush();return out;
+ }
+ function parseExcel(file){
+  return file.arrayBuffer().then(buf=>{const wb=XLSX.read(buf,{type:'array',cellDates:true}),out=[];
+   wb.SheetNames.forEach(sn=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:'',raw:true});rows.forEach(r=>{
+    const keys=Object.keys(r),pick=(terms)=>{const k=keys.find(x=>terms.some(t=>norm(x).includes(t)));return k?r[k]:''};
+    const desc=pick(['transaction details','description','particular','merchant','payee','narration','name']);
+    const rawAmt=pick(['amount','debit','credit','paid','received']);
+    let amount=Number(String(rawAmt).replace(/[^0-9.-]/g,''));let direction=Number(pick(['credit']))>0?'credit':Number(pick(['debit']))>0?'debit':amount<0?'debit':'unknown';
+    if(!amount&&Number(pick(['debit']))>0)amount=Number(pick(['debit']));
+    if(!amount&&Number(pick(['credit']))>0)amount=Number(pick(['credit']));
+    const dt=pick(['date & time','date','transaction date','timestamp']);
+    const date=dt instanceof Date?dt.toISOString():new Date(dt).toISOString();
+    out.push(classify({description:String(desc||'UPI payment'),amount,direction,date,ref:String(pick(['upi ref','utr','reference no','transaction id','txn id'])),tag:String(pick(['tag','category'])),category:String(pick(['tag','category']))}));
+   })});return out.filter(x=>x.amount>0);
+  });
+ }
+ async function parsePDF(file){
+  if(!window.pdfjsLib)throw new Error('PDF reader could not load. Check your internet connection and try again.');
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise,all=[];
+  for(let p=1;p<=pdf.numPages;p++){
+   const page=await pdf.getPage(p),tc=await page.getTextContent();
+   const rows=[];tc.items.forEach(it=>{const y=Math.round(it.transform[5]);let row=rows.find(r=>Math.abs(r.y-y)<3);if(!row)rows.push(row={y,items:[]});row.items.push({x:it.transform[4],str:it.str})});
+   rows.sort((a,b)=>b.y-a.y);const text=rows.map(r=>r.items.sort((a,b)=>a.x-b.x).map(i=>i.str).join(' ')).join('\n');all.push(text);
+   $id('upiProgressBar').style.width=Math.round(p/pdf.numPages*100)+'%';$id('upiStatusDetail').textContent='Reading page '+p+' of '+pdf.numPages+'…';
+  }
+  return parsePaytmText(all.join('\n'));
+ }
+ function showReview(rows){
+  parsed=rows;const existingRefs=new Set(expenses.map(x=>((x.notes||'').match(/UPI Ref:\s*(\d+)/)||[])[1]).filter(Boolean));
+  parsed.forEach(x=>{x.duplicate=!!x.ref&&existingRefs.has(x.ref);if(x.duplicate)x.selected=false});
+  const eligible=parsed.filter(x=>!x.excluded&&!x.duplicate&&!x.direction.includes('credit'));
+  $id('upiStats').innerHTML='<span>'+parsed.length+' transactions found</span><span>'+eligible.length+' eligible expenses</span><span>'+parsed.filter(x=>x.duplicate).length+' duplicates skipped</span><span>'+parsed.filter(x=>x.excluded||x.direction==='credit').length+' transfers / credits excluded</span>';
+  $id('upiSummary').textContent='Check the suggestions. Anything uncertain is highlighted for your decision.';
+  $id('upiRows').innerHTML=parsed.map((x,i)=>'<tr style="'+(x.excluded||x.duplicate||x.direction==='credit'?'opacity:.48':'')+'"><td><input type="checkbox" data-import-check="'+i+'" '+(x.selected?'checked':'')+' '+(x.excluded||x.duplicate||x.direction==='credit'?'disabled':'')+'></td><td>'+escapeHTML(x.dateText||new Date(x.date).toLocaleDateString('en-IN'))+'</td><td><strong>'+escapeHTML(x.name)+'</strong><div class="muted">'+escapeHTML(x.ref?'Ref '+x.ref:x.reason||'')+'</div></td><td>'+money(x.amount)+'</td><td><select data-import-cat="'+i+'" '+(x.excluded||x.duplicate||x.direction==='credit'?'disabled':'')+'>'+[...new Set([...builtIn,...(x.category&&!builtIn.includes(x.category)?[x.category]:[])])].map(c=>'<option '+(c===x.category?'selected':'')+'>'+escapeHTML(c)+'</option>').join('')+'</select></td><td>'+ (x.duplicate?'Duplicate':x.excluded?'Excluded':x.direction==='credit'?'Received':x.needsReview?'<b style="color:#bd7b22">Please review</b>':'Expense')+'</td></tr>').join('');
+  $id('upiCount').textContent=eligible.filter(x=>x.selected).length+' selected';
+  $id('upiReview').hidden=false;$id('upiProgress').hidden=true;
+  document.querySelectorAll('[data-import-cat]').forEach(el=>el.onchange=()=>{parsed[+el.dataset.importCat].category=el.value;parsed[+el.dataset.importCat].needsReview=false});
+  document.querySelectorAll('[data-import-check]').forEach(el=>el.onchange=()=>{parsed[+el.dataset.importCheck].selected=el.checked;updateCount()});
+ }
+ const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function updateCount(){$id('upiCount').textContent=parsed.filter(x=>x.selected&&!x.excluded&&!x.duplicate&&x.direction!=='credit').length+' selected'}
+ async function handleFile(file){
+  if(!file)return;$id('upiReview').hidden=true;$id('upiProgress').hidden=false;$id('upiProgressBar').style.width='0%';$id('upiStatus').textContent='Reading '+file.name;
+  try{let rows;if(file.name.toLowerCase().endsWith('.pdf'))rows=await parsePDF(file);else rows=await parseExcel(file);
+   if(!rows.length)throw new Error('No transactions could be read. Please use the original Paytm PDF or Excel statement, not a screenshot.');
+   showReview(rows);toast('Statement read. Please review before importing.');
+  }catch(e){$id('upiProgress').hidden=true;toast('Could not read statement: '+e.message)}
+ }
+ $id('upiFile').addEventListener('change',e=>handleFile(e.target.files[0]));
+ $id('upiDrop').addEventListener('dragover',e=>{e.preventDefault();$id('upiDrop').style.borderColor='#6558e8'});
+ $id('upiDrop').addEventListener('drop',e=>{e.preventDefault();$id('upiDrop').style.borderColor='';handleFile(e.dataTransfer.files[0])});
+ $id('upiSelectAll').onchange=e=>{parsed.forEach(x=>{if(!x.excluded&&!x.duplicate&&x.direction!=='credit')x.selected=e.target.checked});document.querySelectorAll('[data-import-check]').forEach(c=>{if(!c.disabled)c.checked=e.target.checked});updateCount()};
+ $id('upiCancel').onclick=()=>{$id('upiReview').hidden=true;$id('upiFile').value='';parsed=[]};
+ $id('upiImportBtn').onclick=async()=>{
+  const selected=parsed.filter(x=>x.selected&&!x.excluded&&!x.duplicate&&x.direction!=='credit');
+  if(!selected.length)return toast('Select at least one expense to import.');
+  const previous=expenses.slice(),newItems=selected.map(x=>({id:'e_'+Date.now()+'_'+Math.random().toString(36).slice(2,10),name:String(x.name||'UPI expense').slice(0,80),amount:x.amount,category:x.category||'Other',method:'UPI',date:x.date||new Date().toISOString(),notes:[x.note||'',x.upi?'UPI ID: '+x.upi:'',x.ref?'UPI Ref: '+x.ref:'','Imported from Paytm statement'].filter(Boolean).join(' · ')}));
+  $id('upiImportBtn').disabled=true;$id('upiImportBtn').textContent='Importing…';
+  try{expenses=[...expenses,...newItems];await save();buildFilters();render();$id('upiReview').hidden=true;$id('upiFile').value='';parsed=[];toast(newItems.length+' expenses imported successfully.');goPage('transactions')}
+  catch(e){expenses=previous;toast('Import could not be fully synced: '+e.message)}
+  finally{$id('upiImportBtn').disabled=false;$id('upiImportBtn').textContent='Import selected expenses'}
+ };
 })();
 </script>
 </body></html>
