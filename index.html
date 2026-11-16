@@ -573,7 +573,8 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
   $id('upiCount').textContent=eligible.filter(x=>x.selected).length+' selected';
   $id('upiReview').hidden=false;$id('upiProgress').hidden=true;
   document.querySelectorAll('[data-import-cat]').forEach(el=>el.onchange=()=>{parsed[+el.dataset.importCat].category=el.value;parsed[+el.dataset.importCat].needsReview=false});
-  document.querySelectorAll('[data-import-assignee]').forEach(el=>el.oninput=()=>{parsed[+el.dataset.importAssignee].assignedTo=el.value});\n  document.querySelectorAll('[data-import-check]').forEach(el=>el.onchange=()=>{parsed[+el.dataset.importCheck].selected=el.checked;updateCount()});
+  document.querySelectorAll('[data-import-assignee]').forEach(el=>el.oninput=()=>{parsed[+el.dataset.importAssignee].assignedTo=el.value});
+  document.querySelectorAll('[data-import-check]').forEach(el=>el.onchange=()=>{parsed[+el.dataset.importCheck].selected=el.checked;updateCount()});
  }
  const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function updateCount(){$id('upiCount').textContent=parsed.filter(x=>x.selected&&!x.excluded&&!x.duplicate&&x.direction!=='credit').length+' selected'}
