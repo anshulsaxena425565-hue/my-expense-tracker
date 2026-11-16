@@ -473,7 +473,8 @@ function goPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.rem
 const closeSidebar=()=>{$('sidebar').classList.remove('open');$('sidebarBackdrop').classList.remove('show');document.body.style.overflow=''};const openSidebar=()=>{$('sidebar').classList.add('open');$('sidebarBackdrop').classList.add('show');document.body.style.overflow='hidden'};$('menuBtn').onclick=()=>{$('sidebar').classList.contains('open')?closeSidebar():openSidebar()};$('sidebarBackdrop').onclick=closeSidebar;document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSidebar()});
 $('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({format:'pocket-expenses-v1',exportedAt:new Date().toISOString(),user:{name:user.name,email:user.email},expenses},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pocket-expenses-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exported.')};
 $('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.format!=='pocket-expenses-v1'||!Array.isArray(data.expenses))throw Error('Invalid backup');const valid=data.expenses.filter(x=>x&&typeof x.name==='string'&&Number(x.amount)>0&&x.date&&x.id);const replace=confirm('Import '+valid.length+' expenses? Choose OK to replace your current list, or Cancel to merge.');if(replace)expenses=valid;else{const ids=new Set(expenses.map(x=>x.id));expenses.push(...valid.filter(x=>!ids.has(x.id)))}await save();buildFilters();render();toast('Backup imported and synced.')}catch(err){toast('Could not import this backup file.')}e.target.value=''};
-authView();appwriteReady.then(async()=>{try{user=await account.get();await enterApp()}catch{authView()}}).catch(error=>{toast('Could not connect to Appwrite: '+error.message)});
+window.PocketImportBridge={get expenses(){return expenses},set expenses(value){expenses=value},get user(){return user},save,buildFilters,render,toast};
+ authView();appwriteReady.then(async()=>{try{user=await account.get();await enterApp()}catch{authView()}}).catch(error=>{toast('Could not connect to Appwrite: '+error.message)});
 })();
 </script>
 
@@ -481,14 +482,14 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script id="pocket-upi-import">
 (()=>{
- const $id=id=>document.getElementById(id);let parsed=[];
+ const $id=id=>document.getElementById(id);const bridge=window.PocketImportBridge;let parsed=[];
  const builtIn=['Food & Drinks','Groceries','Transport','Shopping','Bills & Utilities','Health','Entertainment','Travel','Education','Personal Care','Home','Other','Gifts','Money Transfer'];
  const norm=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
- function getUserRules(){try{return JSON.parse(localStorage.getItem('pocket_import_rules_'+(user?.$id||'guest'))||'[]')}catch{return []}}
+ function getUserRules(){try{return JSON.parse(localStorage.getItem('pocket_import_rules_'+(bridge.user?.$id||'guest'))||'[]')}catch{return []}}
  function saveUserRules(rules){localStorage.setItem('pocket_import_rules_'+(user?.$id||'guest'),JSON.stringify(rules))}
  function applyUserRule(payee){const t=norm(payee);return getUserRules().find(r=>r.match&&t.includes(norm(r.match)))||null}
  function renderUserRules(){const box=$id('upiSavedRules');if(!box)return;const rules=getUserRules();box.innerHTML=rules.length?rules.map((r,i)=>'<div class="saved-rule"><div><strong>'+escapeHTML(r.match)+' → '+escapeHTML(r.category)+'</strong><small>Assigned to: '+escapeHTML(r.assignedTo||'Not specified')+'</small></div><button type="button" data-rule-delete="'+i+'">Remove</button></div>').join(''):'<p class="muted">No personal rules yet. Add one above.</p>';box.querySelectorAll('[data-rule-delete]').forEach(b=>b.onclick=()=>{const a=getUserRules();a.splice(+b.dataset.ruleDelete,1);saveUserRules(a);renderUserRules()})}
- $id('upiRuleForm').addEventListener('submit',e=>{e.preventDefault();const match=$id('ruleMatch').value.trim(),category=$id('ruleCategory').value.trim(),assignedTo=$id('ruleAssigned').value.trim();if(!match||!category)return;const rules=getUserRules().filter(r=>norm(r.match)!==norm(match));rules.unshift({match,category,assignedTo});saveUserRules(rules);e.target.reset();renderUserRules();toast('Import rule saved.')});
+ $id('upiRuleForm').addEventListener('submit',e=>{e.preventDefault();const match=$id('ruleMatch').value.trim(),category=$id('ruleCategory').value.trim(),assignedTo=$id('ruleAssigned').value.trim();if(!match||!category)return;const rules=getUserRules().filter(r=>norm(r.match)!==norm(match));rules.unshift({match,category,assignedTo});saveUserRules(rules);e.target.reset();renderUserRules();bridge.toast('Import rule saved.')});
  renderUserRules();
  function guessCategory(payee,tag='',upi=''){
   const t=norm(payee+' '+tag+' '+upi);
@@ -580,10 +581,10 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
   return parsePaytmText(all.join('\n'));
  }
  function showReview(rows){
-  parsed=rows;const existingRefs=new Set(expenses.map(x=>((x.notes||'').match(/UPI Ref:\s*(\d+)/)||[])[1]).filter(Boolean));
+  parsed=rows;const existingRefs=new Set(bridge.expenses.map(x=>((x.notes||'').match(/UPI Ref:\s*(\d+)/)||[])[1]).filter(Boolean));
   parsed.forEach(x=>{x.duplicate=!!x.ref&&existingRefs.has(x.ref);if(x.duplicate)x.selected=false});
   const eligible=parsed.filter(x=>!x.excluded&&!x.duplicate&&!x.direction.includes('credit'));
-  $id('upiStats').innerHTML='<span>'+parsed.length+' transactions found</span><span>'+eligible.length+' eligible expenses</span><span>'+parsed.filter(x=>x.duplicate).length+' duplicates skipped</span><span>'+parsed.filter(x=>x.excluded||x.direction==='credit').length+' transfers / credits excluded</span>';
+  $id('upiStats').innerHTML='<span>'+parsed.length+' transactions found</span><span>'+eligible.length+' eligible bridge.expenses</span><span>'+parsed.filter(x=>x.duplicate).length+' duplicates skipped</span><span>'+parsed.filter(x=>x.excluded||x.direction==='credit').length+' transfers / credits excluded</span>';
   $id('upiSummary').textContent='Check the suggestions. Anything uncertain is highlighted for your decision.';
   $id('upiRows').innerHTML=parsed.map((x,i)=>'<tr style="'+(x.excluded||x.duplicate||x.direction==='credit'?'opacity:.48':'')+'"><td><input type="checkbox" data-import-check="'+i+'" '+(x.selected?'checked':'')+' '+(x.excluded||x.duplicate||x.direction==='credit'?'disabled':'')+'></td><td>'+escapeHTML(x.dateText||new Date(x.date).toLocaleDateString('en-IN'))+'</td><td><strong>'+escapeHTML(x.name)+'</strong><div class="muted">'+escapeHTML(x.ref?'Ref '+x.ref:x.reason||'')+'</div></td><td>'+money(x.amount)+'</td><td><select data-import-cat="'+i+'" '+(x.excluded||x.duplicate||x.direction==='credit'?'disabled':'')+'>'+[...new Set([...builtIn,...(x.category&&!builtIn.includes(x.category)?[x.category]:[])])].map(c=>'<option '+(c===x.category?'selected':'')+'>'+escapeHTML(c)+'</option>').join('')+'</select></td><td><input data-import-assignee="'+i+'" value="'+escapeHTML(x.assignedTo||'')+'" placeholder="Person / family" style="width:125px;padding:8px;border:1px solid #e2e7f0;border-radius:8px" '+(x.excluded||x.duplicate||x.direction==='credit'?'disabled':'')+'></td><td>'+ (x.duplicate?'Duplicate':x.excluded?'Excluded':x.direction==='credit'?'Received':x.needsReview?'<b style="color:#bd7b22">Please review</b>':'Expense')+'</td></tr>').join('');
   $id('upiCount').textContent=eligible.filter(x=>x.selected).length+' selected';
@@ -609,11 +610,11 @@ authView();appwriteReady.then(async()=>{try{user=await account.get();await enter
  $id('upiImportBtn').onclick=async()=>{
   const selected=parsed.filter(x=>x.selected&&!x.excluded&&!x.duplicate&&x.direction!=='credit');
   if(!selected.length)return toast('Select at least one expense to import.');
-  const previous=expenses.slice(),newItems=selected.map(x=>({id:'e_'+Date.now()+'_'+Math.random().toString(36).slice(2,10),name:String(x.name||'UPI expense').slice(0,80),amount:x.amount,category:x.category||'Other',method:'UPI',date:x.date||new Date().toISOString(),notes:[x.note||'',x.upi?'UPI ID: '+x.upi:'',x.ref?'UPI Ref: '+x.ref:'','Imported from Paytm statement'].filter(Boolean).join(' · '),assignedTo:x.assignedTo||''}));
+  const previous=bridge.expenses.slice(),newItems=selected.map(x=>({id:'e_'+Date.now()+'_'+Math.random().toString(36).slice(2,10),name:String(x.name||'UPI expense').slice(0,80),amount:x.amount,category:x.category||'Other',method:'UPI',date:x.date||new Date().toISOString(),notes:[x.note||'',x.upi?'UPI ID: '+x.upi:'',x.ref?'UPI Ref: '+x.ref:'','Imported from Paytm statement'].filter(Boolean).join(' · '),assignedTo:x.assignedTo||''}));
   $id('upiImportBtn').disabled=true;$id('upiImportBtn').textContent='Importing…';
-  try{expenses=[...expenses,...newItems];await save();buildFilters();render();$id('upiReview').hidden=true;$id('upiFile').value='';parsed=[];toast(newItems.length+' expenses imported successfully.');goPage('transactions')}
-  catch(e){expenses=previous;toast('Import could not be fully synced: '+e.message)}
-  finally{$id('upiImportBtn').disabled=false;$id('upiImportBtn').textContent='Import selected expenses'}
+  try{bridge.expenses=[...bridge.expenses,...newItems];await bridge.save();bridge.buildFilters();bridge.render();$id('upiReview').hidden=true;$id('upiFile').value='';parsed=[];toast(newItems.length+' bridge.expenses imported successfully.');goPage('transactions')}
+  catch(e){bridge.expenses=previous;toast('Import could not be fully synced: '+e.message)}
+  finally{$id('upiImportBtn').disabled=false;$id('upiImportBtn').textContent='Import selected bridge.expenses'}
  };
 })();
 </script>
