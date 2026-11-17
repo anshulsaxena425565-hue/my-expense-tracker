@@ -295,3 +295,29 @@ input:focus,select:focus,textarea:focus{border-color:#7772df;box-shadow:0 0 0 3p
 .authbox .brand-mark{background:#e1ecdb;color:#28563f}
 .loading{position:relative}
 @media(max-width:700px){.side .brand{display:flex;margin:0 8px 0 0;font-size:18px;gap:7px}.side .brand-mark{width:29px;height:29px;flex-basis:29px;border-radius:9px}.side .brand-mark svg{width:25px;height:25px}}
+
+/* Mobile navigation correction: brand stays at the top; navigation stays full-size at the bottom */
+@media(max-width:700px){
+ body{padding-top:58px;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+ .side{height:76px;padding:8px 7px calc(8px + env(safe-area-inset-bottom));gap:2px;overflow:visible;justify-content:space-between;border-radius:17px 17px 0 0}
+ .side .brand{display:flex!important;position:fixed;top:10px;left:13px;z-index:31;margin:0!important;gap:8px;font-size:20px!important;line-height:1;color:#252653!important;letter-spacing:-.8px}
+ .side .brand-mark{width:34px!important;height:34px!important;flex:0 0 34px!important;border-radius:11px!important;background:#e3eddf!important;color:#28563f!important}
+ .side .brand-mark svg{width:29px!important;height:29px!important}
+ .side .brand-word{display:inline!important}
+ .side .eyebrow{display:none!important}
+ .sidefoot{display:flex!important;position:fixed;top:8px;right:10px;z-index:32;margin:0;padding:0;border:0;gap:0}
+ .sidefoot .avatar{width:35px;height:35px;font-size:12px}
+ .sidefoot .user{display:none}
+ .sidefoot .logout{display:grid;place-items:center;width:35px;height:35px;margin-left:5px;padding:0;border-radius:10px;background:#f0f1fa;color:#3b397f}
+ .side>button{flex:1 1 0;min-width:0;min-height:57px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:7px 2px!important;border-radius:12px;font-size:10px!important;font-weight:650;line-height:1.15;letter-spacing:0;white-space:nowrap}
+ .side>button i{display:grid;place-items:center;width:auto!important;height:22px;margin:0!important;font-size:20px!important;line-height:1}
+ .side>button i svg{width:21px;height:21px}
+ .side>button.active,.side>button:hover{background:#ffffff1d;box-shadow:inset 0 2px #c7c4ff}
+ .main{padding:8px 14px 30px}
+ .main header{margin-bottom:19px}
+}
+@media(max-width:380px){
+ .side{padding-left:4px;padding-right:4px}
+ .side>button{font-size:9px!important;gap:4px;padding-left:1px!important;padding-right:1px!important}
+ .side>button i svg{width:19px;height:19px}
+}
