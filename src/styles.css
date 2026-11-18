@@ -321,3 +321,14 @@ input:focus,select:focus,textarea:focus{border-color:#7772df;box-shadow:0 0 0 3p
  .side>button{font-size:9px!important;gap:4px;padding-left:1px!important;padding-right:1px!important}
  .side>button i svg{width:19px;height:19px}
 }
+
+
+.payment-sources-panel .source-form{align-items:end;margin:22px 0 18px;padding:18px;background:#f7f8f5;border:1px solid var(--line,#e7e9e3);border-radius:16px}
+.payment-source-list{display:grid;gap:0;border-top:1px solid var(--line,#e7e9e3)}
+.payment-source-row{display:flex;align-items:center;gap:13px;padding:14px 4px;border-bottom:1px solid var(--line,#e7e9e3)}
+.payment-source-row>div{display:grid;gap:3px;flex:1;min-width:0}
+.payment-source-row small{color:var(--muted,#777);font-size:12px}
+.source-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:#eef2eb;color:#456d50;flex:none}
+.source-note{font-size:12px;line-height:1.6;margin-top:18px}
+.import-provider{display:block;max-width:420px;margin:12px 0}
+@media(max-width:640px){.payment-sources-panel .source-form{grid-template-columns:1fr;padding:14px}.payment-source-row{gap:9px}.payment-source-row .rowbtn{font-size:12px}}
