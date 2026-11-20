@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.setHeader('Access-Control-Allow-Origin', '*');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
@@ -7,8 +7,8 @@ export default async function handler(req, res) {
   try {
     if (type === 'stock') {
       const symbol = String(req.query.symbol || '').trim().toUpperCase();
-      if (!/^[A-Z0-9.^_-]{1,30}$/.test(symbol)) {
-        return res.status(400).json({ error: 'Enter a valid stock ticker, e.g. RELIANCE.NS' });
+      if (!/^[A-Z0-9.^_-]{1,30}$/.test(symbol) || !/\\.(NS|BO)$/.test(symbol)) {
+        return res.status(400).json({ error: 'Enter an Indian NSE/BSE ticker ending in .NS or .BO, e.g. RELIANCE.NS' });
       }
       const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' +
         encodeURIComponent(symbol) + '?range=1d&interval=1m';
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       const result = json?.chart?.result?.[0];
       const price = result?.meta?.regularMarketPrice ??
         result?.indicators?.quote?.[0]?.close?.filter(Number.isFinite).slice(-1)[0];
-      if (!(Number(price) > 0)) throw new Error('No current quote found for ' + symbol);
+      if (!(Number(price) > 0)) throw new Error('No current quote found for ' + symbol);\n      if (result.meta.currency !== 'INR') throw new Error('This ticker is not quoted in INR. Use an Indian NSE (.NS) or BSE (.BO) ticker.');
       return res.status(200).json({
         type: 'stock', symbol, price: Number(price),
         currency: result.meta.currency || 'INR',
