@@ -28,6 +28,15 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    if (type === 'mutual-fund-search') {
+      const query = String(req.query.q || '').trim();
+      if (query.length < 3) return res.status(200).json({ results: [] });
+      const response = await fetch('https://api.mfapi.in/mf/search?q=' + encodeURIComponent(query));
+      if (!response.ok) throw new Error('Mutual fund search provider returned ' + response.status);
+      const results = await response.json();
+      return res.status(200).json({results:(Array.isArray(results)?results:[]).slice(0,20).map(x=>({schemeCode:String(x.schemeCode||''),schemeName:String(x.schemeName||'')}))});
+    }
+
     if (type === 'mutual-fund') {
       const schemeCode = String(req.query.schemeCode || '').trim();
       if (!/^\d{4,10}$/.test(schemeCode)) {
