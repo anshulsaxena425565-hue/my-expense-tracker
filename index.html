@@ -893,7 +893,7 @@ $('investmentForm').onsubmit=async e=>{
   const ppfContribution=Number($('invPpfContribution').value||0);
   const ppfNote=$('invType').value==='PPF'&&ppfContribution>0?'PPF contribution FY '+$('invPpfYear').value+': '+invMoney(ppfContribution):'';
   const combinedNotes=$('invType').value==='PPF'?[existingPpf?.notes||$('invNotes').value.trim(),ppfNote].filter(Boolean).join('\n'):$('invNotes').value.trim();
-  const type=$('invType').value,epf=type==='EPF',market=['Stocks','Mutual Fund','SIP (Mutual Fund)'].includes(type);
+  const type=$('invType').value,epf=type==='EPF',savings=type==='Savings Account',market=['Stocks','Mutual Fund','SIP (Mutual Fund)'].includes(type);
   const cached=investments.find(x=>x.id===$('investmentId').value);
   const units=Number($('invUnits').value)||0,unitCost=Number($('invInvestedInput').value)||0;
   const quotePrice=draftMarketQuote?.price??cached?.marketPrice;
