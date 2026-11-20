@@ -403,8 +403,9 @@ input,select,textarea{accent-color:#6558e8}
 <div id="auth" class="auth-screen">
  <div class="auth-card"><div class="auth-brand"><span class="brand-mark"><i class="ph ph-wallet"></i></span> pocket<span style="color:var(--brand)">.</span></div>
  <h1 id="authTitle">Welcome back</h1><p id="authSub">Sign in to securely sync your expenses across devices.</p>
- <form id="authForm" class="auth-form"><div class="field" id="nameField" style="display:none"><label>Your name</label><input id="authName" autocomplete="name" placeholder="Your name"></div><div class="field"><label>Email address</label><input id="authEmail" type="email" required autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input id="authPassword" type="password" required minlength="8" autocomplete="current-password" placeholder="At least 8 characters"></div><button class="primary" id="authSubmit" type="submit">Sign in</button></form>
- <div class="auth-switch"><span id="authSwitchText">New to Pocket?</span> <button class="link-btn" id="authSwitch" type="button">Create account</button></div>
+ <form id="authForm" class="auth-form"><div class="field" id="nameField" style="display:none"><label>Your name</label><input id="authName" autocomplete="name" placeholder="Your name"></div><div class="field" id="authEmailField"><label>Email address</label><input id="authEmail" type="email" required autocomplete="email" placeholder="you@example.com"></div><div class="field" id="authPasswordField"><label id="authPasswordLabel">Password</label><input id="authPassword" type="password" required minlength="8" autocomplete="current-password" placeholder="At least 8 characters"></div><button class="primary" id="authSubmit" type="submit">Sign in</button></form>
+ <div style="text-align:right;margin-top:10px" id="forgotPasswordWrap"><button class="link-btn" id="forgotPassword" type="button">Forgot password?</button></div>
+ <div class="auth-switch" id="authSwitchWrap"><span id="authSwitchText">New to Pocket?</span> <button class="link-btn" id="authSwitch" type="button">Create account</button></div>
  <div class="auth-note">Your account is securely managed by Appwrite. Each signed-in account can access only its own expense records. Do not store bank credentials, card numbers, OTPs or other highly sensitive information here.</div></div>
 </div>
 <div id="app" class="app" style="display:none">
@@ -521,7 +522,10 @@ const APPWRITE_PROJECT_ID='6afb36e60028d5bbc86e';
 const APPWRITE_DATABASE_ID='pocket';
 const APPWRITE_TABLE_ID='expenses';
 const APPWRITE_INVESTMENTS_TABLE_ID='investments';
-let aw={},account=null,tablesDB=null,cloudIds=new Set(),signup=false; 
+let aw={},account=null,tablesDB=null,cloudIds=new Set(),signup=false,recoveryMode=null;
+const recoveryParams=new URLSearchParams(location.search);
+const recoveryUserId=recoveryParams.get('userId'),recoverySecret=recoveryParams.get('secret');
+if(recoveryUserId&&recoverySecret)recoveryMode='reset'; 
 const appwriteReady=import('https://sdk.appwrite.io/web/29.2.0/index.js').then(mod=>{const client=new mod.Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);account=new mod.Account(client);tablesDB=new mod.TablesDB(client);aw={...mod,client};return mod});
 const categories=['Food & Drinks','Transport','Shopping','Bills & Utilities','Health','Entertainment','Travel','Education','Personal Care','Home','Other'];
 const icons={'Food & Drinks':'fork-knife','Transport':'car','Shopping':'shopping-bag','Bills & Utilities':'receipt','Health':'first-aid-kit','Entertainment':'film-strip','Travel':'airplane','Education':'book-open','Personal Care':'sparkle','Home':'house','Other':'package'}; const categoryIcon=c=>'<i class="ph ph-'+(icons[c]||'package')+'"></i>';
@@ -531,11 +535,41 @@ const dateObj=s=>new Date(s);
 const dateLabel=s=>dateObj(s).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
 const dtLocal=d=>{const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,16)};
 const toast=s=>{const t=$('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200)};
-function authView(){document.body.classList.add('auth-mode');user=null;expenses=[];cloudIds=new Set();$('app').style.display='none';$('auth').style.display='grid';$('authTitle').textContent=signup?'Create your account':'Welcome back';$('authSub').textContent=signup?'Create an account to keep your expenses in sync.':'Sign in to securely sync your expenses across devices.';$('nameField').style.display=signup?'grid':'none';$('authName').required=signup;$('authSubmit').textContent=signup?'Create account':'Sign in';$('authSwitchText').textContent=signup?'Already have an account?':'New to Pocket?';$('authSwitch').textContent=signup?'Sign in':'Create account';$('authPassword').autocomplete=signup?'new-password':'current-password'}
-$('authSwitch').onclick=()=>{signup=!signup;authView()};
+function authView(){document.body.classList.add('auth-mode');user=null;expenses=[];cloudIds=new Set();$('app').style.display='none';$('auth').style.display='grid';
+ const isRequest=recoveryMode==='request',isReset=recoveryMode==='reset';
+ $('authTitle').textContent=isReset?'Choose a new password':isRequest?'Reset your password':signup?'Create your account':'Welcome back';
+ $('authSub').textContent=isReset?'Enter a new password for your Pocket account.':isRequest?'Enter the email address linked to your Pocket account. We’ll send you a secure reset link.':signup?'Create an account to keep your expenses in sync.':'Sign in to securely sync your expenses across devices.';
+ $('nameField').style.display=signup&&!recoveryMode?'grid':'none';$('authName').required=signup&&!recoveryMode;
+ $('authEmailField').style.display=isReset?'none':'grid';$('authEmail').required=!isReset;
+ $('authPasswordField').style.display=isRequest?'none':'grid';$('authPassword').required=!isRequest;
+ $('authPasswordLabel').textContent=isReset?'New password':'Password';
+ $('authPassword').autocomplete=(signup||isReset)?'new-password':'current-password';
+ $('authPassword').placeholder=isReset?'At least 8 characters':'At least 8 characters';
+ $('authSubmit').textContent=isReset?'Update password':isRequest?'Send reset link':signup?'Create account':'Sign in';
+ $('forgotPasswordWrap').style.display=(!signup&&!recoveryMode)?'block':'none';
+ $('authSwitchWrap').style.display=isReset?'none':'block';
+ $('authSwitchText').textContent=isRequest?'Remembered your password?':signup?'Already have an account?':'New to Pocket?';
+ $('authSwitch').textContent=isRequest?'Back to sign in':signup?'Sign in':'Create account';
+}
+$('authSwitch').onclick=()=>{if(recoveryMode){recoveryMode=null;signup=false}else signup=!signup;authView()};
+$('forgotPassword').onclick=()=>{signup=false;recoveryMode='request';authView()};
+
 async function loadCloudExpenses(){const docs=[];let queries=[aw.Query.equal('userId',user.$id),aw.Query.limit(100)];let page=await tablesDB.listRows({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_TABLE_ID,queries});docs.push(...page.rows);while(page.rows.length===100&&docs.length<5000){page=await tablesDB.listRows({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_TABLE_ID,queries:[aw.Query.equal('userId',user.$id),aw.Query.limit(100),aw.Query.cursorAfter(page.rows[page.rows.length-1].$id)]});if(!page.rows.length)break;docs.push(...page.rows)}expenses=docs.map(r=>{const d=r.data||r;return{id:r.$id,name:d.title,amount:Number(d.amount),category:d.category,method:d.method,date:d.spentAt,notes:d.notes||'',assignedTo:d.assignedTo||''}});cloudIds=new Set(expenses.map(x=>x.id))}
 async function save(){const current=new Set(expenses.map(x=>x.id));const deletes=[...cloudIds].filter(id=>!current.has(id));for(const id of deletes)await tablesDB.deleteRow({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_TABLE_ID,rowId:id});for(const x of expenses){const data={userId:user.$id,title:String(x.name).slice(0,80),amount:Number(x.amount),category:x.category,method:x.method,spentAt:new Date(x.date).toISOString(),notes:String(x.notes||'').slice(0,2000),assignedTo:String(x.assignedTo||'').trim().slice(0,60)};if(cloudIds.has(x.id)){await tablesDB.updateRow({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_TABLE_ID,rowId:x.id,data})}else{await tablesDB.createRow({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_TABLE_ID,rowId:x.id,data,permissions:[aw.Permission.read(aw.Role.user(user.$id)),aw.Permission.update(aw.Role.user(user.$id)),aw.Permission.delete(aw.Role.user(user.$id))]})}}cloudIds=current}
-$('authForm').onsubmit=async e=>{e.preventDefault();const email=$('authEmail').value.trim().toLowerCase(),password=$('authPassword').value;try{await appwriteReady;if(signup){const name=$('authName').value.trim();await account.create({userId:aw.ID.unique(),email,password,name});await account.createEmailPasswordSession({email,password})}else{await account.createEmailPasswordSession({email,password})}await enterApp()}catch(error){toast(error.message||'Could not sign in.')}};
+$('authForm').onsubmit=async e=>{e.preventDefault();const email=$('authEmail').value.trim().toLowerCase(),password=$('authPassword').value;const submit=$('authSubmit');try{await appwriteReady;submit.disabled=true;submit.textContent='Please wait…';
+ if(recoveryMode==='request'){
+  const redirectUrl=location.origin+location.pathname+'?recovery=1';
+  await account.createRecovery({email,url:redirectUrl});
+  recoveryMode=null;signup=false;authView();$('authSub').textContent='If an account exists for that email, a password reset link has been sent. Please check your inbox and spam folder.';toast('If the email is registered, a reset link is on its way.');return;
+ }
+ if(recoveryMode==='reset'){
+  if(!recoveryUserId||!recoverySecret)throw new Error('This reset link is incomplete. Request a new password reset email.');
+  await account.updateRecovery({userId:recoveryUserId,secret:recoverySecret,password});
+  recoveryMode=null;history.replaceState({},document.title,location.pathname);signup=false;authView();$('authSub').textContent='Your password has been updated. Sign in with your new password.';toast('Password updated successfully.');return;
+ }
+ if(signup){const name=$('authName').value.trim();await account.create({userId:aw.ID.unique(),email,password,name});await account.createEmailPasswordSession({email,password})}else{await account.createEmailPasswordSession({email,password})}await enterApp()
+ }catch(error){toast(error.message||'Could not sign in.')}finally{submit.disabled=false;authViewButtonLabel()}};
+function authViewButtonLabel(){if(!$('authSubmit').disabled){$('authSubmit').textContent=recoveryMode==='reset'?'Update password':recoveryMode==='request'?'Send reset link':signup?'Create account':'Sign in'}}
 async function enterApp(){user=await account.get();await Promise.all([loadCloudExpenses(),loadInvestments()]);await processDueSipInstallments();if(!expenses.length&&!signup){const keep=confirm('No saved expenses were found for '+user.email+'. This may be a different or new Pocket account.\n\nChoose OK only if this is the account you intended to use. Choose Cancel to sign out and try your original account.');if(!keep){try{await account.deleteSession({sessionId:'current'})}catch{}authView();$('authSub').textContent='You were signed out of the empty account. Sign in with the email address you originally used for Pocket.';return}}if(!expenses.length){try{const legacy=JSON.parse(localStorage.getItem('pocket_users_v1')||'{}'),oldAccount=legacy[String(user.email).toLowerCase()];if(oldAccount&&Array.isArray(oldAccount.expenses)&&oldAccount.expenses.length&&confirm('Pocket found '+oldAccount.expenses.length+' expenses saved on this browser. Import them into your Appwrite account?')){expenses=oldAccount.expenses.map(x=>({...x,id:aw.ID.unique()}));await save();delete legacy[String(user.email).toLowerCase()];localStorage.setItem('pocket_users_v1',JSON.stringify(legacy));toast('Your previous expenses were migrated to Appwrite.')}}catch(migrationError){throw new Error('Could not migrate previous browser records: '+migrationError.message)}}document.body.classList.remove('auth-mode');$('auth').style.display='none';$('app').style.display='grid';initApp()}
 async function logout(){const buttons=[$('logout'),$('settingsLogout')];buttons.forEach(b=>{if(b){b.disabled=true;b.textContent='Signing out…'}});try{await appwriteReady;if(!account)throw new Error('Account service is not ready. Please try again.');await account.deleteSession({sessionId:'current'});user=null;expenses=[];investments=[];cloudIds=new Set();authView();$('authSub').textContent='You have been signed out securely.';}catch(error){toast('Sign out failed: '+(error?.message||'Please check your connection and try again.'));console.error('Pocket logout failed',error);}finally{buttons.forEach((b,i)=>{if(b){b.disabled=false;b.innerHTML=i===0?'<span class="ico"><i class="ph ph-sign-out"></i></span> Sign out':'Sign out'}})}}
 
@@ -860,7 +894,7 @@ const closeSidebar=()=>{$('sidebar').classList.remove('open');$('sidebarBackdrop
 $('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({format:'pocket-expenses-v1',exportedAt:new Date().toISOString(),user:{name:user.name,email:user.email},expenses},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pocket-expenses-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exported.')};
 $('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.format!=='pocket-expenses-v1'||!Array.isArray(data.expenses))throw Error('Invalid backup');const valid=data.expenses.filter(x=>x&&typeof x.name==='string'&&Number(x.amount)>0&&x.date&&x.id);const replace=confirm('Import '+valid.length+' expenses? Choose OK to replace your current list, or Cancel to merge.');if(replace)expenses=valid;else{const ids=new Set(expenses.map(x=>x.id));expenses.push(...valid.filter(x=>!ids.has(x.id)))}await save();buildFilters();render();toast('Backup imported and synced.')}catch(err){toast('Could not import this backup file.')}e.target.value=''};
 window.PocketImportBridge={get expenses(){return expenses},set expenses(value){expenses=value},get user(){return user},save,buildFilters,render,toast,goPage,money};
- authView();appwriteReady.then(async()=>{try{user=await account.get();await enterApp()}catch{authView()}}).catch(error=>{toast('Could not connect to Appwrite: '+error.message)});
+ authView();appwriteReady.then(async()=>{if(recoveryMode==='reset')return;try{user=await account.get();await enterApp()}catch{authView()}}).catch(error=>{toast('Could not connect to Appwrite: '+error.message)});
 })();
 </script>
 
