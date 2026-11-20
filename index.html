@@ -376,6 +376,27 @@ input,select,textarea{accent-color:#6558e8}
 #page-investment-history #historyPanel .history-badge.bad{background:#ffe4e4;color:#b93640}
 #page-investment-history #historyPanel .history-badge.pending,.history-pending{display:inline-flex;background:#fff2d9;color:#95651b;padding:6px 9px;border-radius:9px;font-size:10px;font-weight:800}
 @media(max-width:760px){#page-investment-history #historyPanel .table-wrap{margin:0 -5px;border-radius:12px}#page-investment-history #historyPanel .history-row td{padding:12px 10px}}
+
+/* Investment editor — consistent, focused modal layout */
+#investmentFormCard{position:fixed!important;z-index:1001;top:50%!important;left:50%!important;transform:translate(-50%,-50%);width:min(920px,calc(100vw - 40px));max-height:min(90vh,900px);overflow:auto;margin:0!important;padding:26px 30px 22px;border:1px solid #e7e9f2;border-radius:22px;box-shadow:0 24px 80px rgba(20,26,48,.22),0 0 0 100vmax rgba(15,23,42,.52);background:linear-gradient(180deg,#fff 0%,#fcfcff 100%)}
+#investmentFormCard .card-head{position:sticky;top:-26px;z-index:3;margin:-26px -30px 24px;padding:22px 30px 18px;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid #eef0f5}
+#investmentFormCard .card-head h2{font:800 21px Manrope;letter-spacing:-.45px;color:#191d32}
+#investmentFormCard .card-head p{font-size:12px;color:#858ba0;margin:5px 0 0}
+#investmentFormCard .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px;row-gap:20px;align-items:start}
+#investmentFormCard .field{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0}
+#investmentFormCard .field label{display:block;margin:0;color:#454c62;font-size:12px;line-height:1.35;font-weight:800;letter-spacing:.12px}
+#investmentFormCard .field input,#investmentFormCard .field select,#investmentFormCard .field textarea{width:100%;min-width:0;height:46px;padding:0 14px;border:1px solid #e3e6ef;border-radius:11px;background:#fff;color:#20253a;font-size:13px;line-height:1.4;box-shadow:0 1px 2px rgba(20,26,48,.025);transition:border-color .18s,box-shadow .18s,background .18s}
+#investmentFormCard .field textarea{height:auto;min-height:82px;padding:12px 14px;resize:vertical}
+#investmentFormCard .field input::placeholder,#investmentFormCard .field textarea::placeholder{color:#a6abbb}
+#investmentFormCard .field input:focus,#investmentFormCard .field select:focus,#investmentFormCard .field textarea:focus{border-color:#766bf0!important;box-shadow:0 0 0 4px rgba(101,88,232,.11)!important;background:#fff}
+#investmentFormCard .field small{display:block;font-size:11px;line-height:1.5;color:#858ba0;margin:0}
+#investmentFormCard .field.full{grid-column:1/-1}
+#investmentFormCard #invMarketPreview,#investmentFormCard #invFdPreview{padding:17px 19px!important;border:1px solid #e4e9fa;border-radius:14px!important;background:linear-gradient(135deg,#f5f7ff,#f7fbff)!important}
+#investmentFormCard #invCalculatedInvested{margin-top:2px!important;padding:12px 14px!important;border-radius:11px!important;line-height:1.5}
+#investmentFormCard .form-actions{position:sticky;bottom:-22px;z-index:3;margin:25px -30px -22px;padding:16px 30px 20px;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid #eef0f5;justify-content:flex-end}
+#investmentFormCard .form-actions .primary{min-width:190px;height:46px;border-radius:12px;font-weight:800}
+#investmentFormCard #cancelInvestment{border-radius:11px}
+@media(max-width:640px){#investmentFormCard{width:calc(100vw - 20px);max-height:94vh;padding:19px 17px 16px;border-radius:18px}#investmentFormCard .card-head{top:-19px;margin:-19px -17px 20px;padding:17px 17px 14px}#investmentFormCard .form-grid{grid-template-columns:minmax(0,1fr);row-gap:16px}#investmentFormCard .field.full{grid-column:1}#investmentFormCard .form-actions{bottom:-16px;margin:20px -17px -16px;padding:13px 17px 16px}#investmentFormCard .form-actions .primary{width:100%;min-width:0}}
 </style>
 </head>
 <body>
