@@ -508,7 +508,8 @@ function showInvestmentDetails(id){
  $('investmentDetailTitle').textContent=x.name;$('investmentDetailSubtitle').textContent=(x.provider||'No institution specified')+' · '+x.assetType;$('investmentDetailBody').innerHTML=html+'</div>';$('investmentDetailModal').style.display='flex';
 }
 
-let draftMarketQuote=null;\nasync function fetchMarketPrice(item){
+let draftMarketQuote=null;
+async function fetchMarketPrice(item){
  const params=new URLSearchParams({type:item.assetType==='Stocks'?'stock':'mutual-fund',symbol:item.stockSymbol||'',schemeCode:item.mfSchemeCode||''});
  const res=await fetch('/api/market-price?'+params.toString(),{cache:'no-store'});const data=await res.json();if(!res.ok||!data.price)throw new Error(data.error||'Market price unavailable');return data;
 }
