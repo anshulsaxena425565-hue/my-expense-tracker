@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
   try {
     if (type === 'stock') {
       const symbol = String(req.query.symbol || '').trim().toUpperCase();
-      if (!/^[A-Z0-9.^_-]{1,30}$/.test(symbol) || !/\\.(NS|BO)$/.test(symbol)) {
+      if (!/^[A-Z0-9.^_-]{1,30}$/.test(symbol) || !/\.(NS|BO)$/.test(symbol)) {
         return res.status(400).json({ error: 'Enter an Indian NSE/BSE ticker ending in .NS or .BO, e.g. RELIANCE.NS' });
       }
       const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' +
@@ -18,7 +18,8 @@ module.exports = async function handler(req, res) {
       const result = json?.chart?.result?.[0];
       const price = result?.meta?.regularMarketPrice ??
         result?.indicators?.quote?.[0]?.close?.filter(Number.isFinite).slice(-1)[0];
-      if (!(Number(price) > 0)) throw new Error('No current quote found for ' + symbol);\n      if (result.meta.currency !== 'INR') throw new Error('This ticker is not quoted in INR. Use an Indian NSE (.NS) or BSE (.BO) ticker.');
+      if (!(Number(price) > 0)) throw new Error('No current quote found for ' + symbol);
+      if (result.meta.currency !== 'INR') throw new Error('This ticker is not quoted in INR. Use an Indian NSE (.NS) or BSE (.BO) ticker.');
       return res.status(200).json({
         type: 'stock', symbol, price: Number(price),
         currency: result.meta.currency || 'INR',
@@ -29,7 +30,7 @@ module.exports = async function handler(req, res) {
 
     if (type === 'mutual-fund') {
       const schemeCode = String(req.query.schemeCode || '').trim();
-      if (!/^\\d{4,10}$/.test(schemeCode)) {
+      if (!/^\d{4,10}$/.test(schemeCode)) {
         return res.status(400).json({ error: 'Enter a valid AMFI mutual fund scheme code.' });
       }
       const response = await fetch('https://api.mfapi.in/mf/' + encodeURIComponent(schemeCode));
