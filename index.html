@@ -558,7 +558,7 @@ async function loadCloudExpenses(){const docs=[];let queries=[aw.Query.equal('us
 async function save(){const current=new Set(expenses.map(x=>x.id));const deletes=[...cloudIds].filter(id=>!current.has(id));for(const id of deletes)await tablesDB.deleteRow({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_TABLE_ID,rowId:id});for(const x of expenses){const data={userId:user.$id,title:String(x.name).slice(0,80),amount:Number(x.amount),category:x.category,method:x.method,spentAt:new Date(x.date).toISOString(),notes:String(x.notes||'').slice(0,2000),assignedTo:String(x.assignedTo||'').trim().slice(0,60)};if(cloudIds.has(x.id)){await tablesDB.updateRow({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_TABLE_ID,rowId:x.id,data})}else{await tablesDB.createRow({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_TABLE_ID,rowId:x.id,data,permissions:[aw.Permission.read(aw.Role.user(user.$id)),aw.Permission.update(aw.Role.user(user.$id)),aw.Permission.delete(aw.Role.user(user.$id))]})}}cloudIds=current}
 $('authForm').onsubmit=async e=>{e.preventDefault();const email=$('authEmail').value.trim().toLowerCase(),password=$('authPassword').value;const submit=$('authSubmit');try{await appwriteReady;submit.disabled=true;submit.textContent='Please wait…';
  if(recoveryMode==='request'){
-  const redirectUrl=location.origin+location.pathname+'?recovery=1';
+  const redirectUrl='https://my-expense-tracker-amber.vercel.app/?recovery=1';
   await account.createRecovery({email,url:redirectUrl});
   recoveryMode=null;signup=false;authView();$('authSub').textContent='If an account exists for that email, a password reset link has been sent. Please check your inbox and spam folder.';toast('If the email is registered, a reset link is on its way.');return;
  }
