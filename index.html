@@ -541,6 +541,49 @@ input,select,textarea{accent-color:#6558e8}
 .cc-card-top{display:flex;align-items:center;justify-content:space-between}.cc-bank-mark{width:44px;height:38px;border-radius:12px;background:#ffffff1c;border:1px solid #ffffff35;display:grid;place-items:center;color:#fff;font-size:22px}.cc-edit-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:9px;border:1px solid #ffffff50;background:#ffffff18;color:#fff;font-size:12px;font-weight:700;cursor:pointer}.cc-edit-btn:hover{background:#ffffff2c}.cc-card-identity{margin:19px 0 16px}.cc-card-identity h2{font:800 20px Manrope;margin:0 0 4px;color:#fff!important;opacity:1!important}.cc-card-identity span{font-size:12px;color:#e0eee5!important;opacity:1!important;font-weight:600}.cc-outstanding-block{padding:15px 16px;border:1px solid #ffffff20;border-radius:14px;background:#ffffff10}.cc-label{font-size:10px;letter-spacing:1.3px;font-weight:800;color:#e0eee5!important;opacity:1!important}.cc-balance{font:800 29px Manrope;color:#fff!important;opacity:1!important;margin:5px 0 0;letter-spacing:-.5px}.cc-limit-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}.cc-limit-row>div{display:flex;flex-direction:column;gap:5px}.cc-limit-row span{font-size:11px;color:#d6e6dc!important;opacity:1!important}.cc-limit-row strong{font:800 14px Manrope;color:#fff!important;opacity:1!important;overflow-wrap:anywhere}.cc-util-wrap{margin:4px 0 17px}.cc-util-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:11px;color:#e0eee5!important;font-weight:600}.cc-util-heading strong{font-size:12px;color:#fff!important}.cc-card-premium .cc-bar{height:8px;border-radius:20px;background:#ffffff32;overflow:hidden}.cc-card-premium .cc-bar span{height:100%;border-radius:20px;background:linear-gradient(90deg,#d5eca6,#f1d78a);box-shadow:0 0 12px #e2edaa55}.cc-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.cc-detail-tile{padding:11px 12px;border-radius:12px;background:#ffffff12;border:1px solid #ffffff1b;min-width:0}.cc-detail-tile span{display:flex;align-items:center;gap:6px;font-size:10px;color:#dbe9df!important;opacity:1!important;margin-bottom:6px}.cc-detail-tile span i{font-size:13px}.cc-detail-tile strong{display:block;font-size:12px;font-weight:800;color:#fff!important;opacity:1!important;overflow-wrap:anywhere}.cc-pay-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:12px;border:0;border-radius:11px;background:#e3efb9;color:#244b36;font-size:12px;font-weight:800;cursor:pointer}.cc-pay-btn:hover{background:#eff7d5;transform:translateY(-1px)}.cc-clear-state{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;padding:11px;border-radius:11px;background:#ffffff14;color:#e5f4e9!important;font-size:12px;font-weight:700}.cc-clear-state i{font-size:16px;color:#bce5a7}
 #page-credit-cards .card-head h2{color:#1d3d30}#page-credit-cards .card-head p{color:#718278!important;opacity:1!important}
 @media(max-width:650px){#page-credit-cards .section-title{align-items:flex-start;gap:12px;flex-direction:column}#ccCardList{grid-template-columns:1fr!important}#ccCardList .cc-card-premium{padding:19px}.cc-balance{font-size:26px}}
+
+/* Credit card readability: force a high-contrast light surface and fully opaque text. */
+#page-credit-cards #ccCardList .cc-card-premium,
+#page-credit-cards #ccCardList .cc-card-premium *{
+ opacity:1!important;filter:none!important;text-shadow:none!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium{
+ background:#ffffff!important;color:#172b23!important;border:1px solid #d7e4da!important;
+ box-shadow:0 10px 30px rgba(20,55,38,.12)!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium .cc-card-identity h2,
+#page-credit-cards #ccCardList .cc-card-premium .cc-balance,
+#page-credit-cards #ccCardList .cc-card-premium .cc-limit-row strong,
+#page-credit-cards #ccCardList .cc-card-premium .cc-util-heading strong,
+#page-credit-cards #ccCardList .cc-card-premium .cc-detail-tile strong{
+ color:#142b20!important;-webkit-text-fill-color:#142b20!important;font-weight:800!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium .cc-card-identity span,
+#page-credit-cards #ccCardList .cc-card-premium .cc-label,
+#page-credit-cards #ccCardList .cc-card-premium .cc-limit-row span,
+#page-credit-cards #ccCardList .cc-card-premium .cc-util-heading,
+#page-credit-cards #ccCardList .cc-card-premium .cc-detail-tile span{
+ color:#40594b!important;-webkit-text-fill-color:#40594b!important;font-weight:700!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium .cc-outstanding-block{
+ background:#f0f7f1!important;border:1px solid #dce9df!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium .cc-detail-tile{
+ background:#f5f8f5!important;border:1px solid #e0e9e2!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium .cc-bank-mark{
+ background:#e7f1e9!important;border:1px solid #d5e5d9!important;color:#1d5a3b!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium .cc-edit-btn{
+ color:#185b3b!important;background:#edf6ef!important;border:1px solid #c9dfcf!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium .cc-util-wrap .cc-bar{background:#dce8de!important}
+#page-credit-cards #ccCardList .cc-card-premium .cc-util-wrap .cc-bar span{background:#27834e!important;box-shadow:none!important}
+#page-credit-cards #ccCardList .cc-card-premium .cc-clear-state{
+ background:#eaf5ec!important;color:#17643a!important;border:1px solid #d1e7d6!important;
+}
+#page-credit-cards #ccCardList .cc-card-premium .cc-clear-state i{color:#168044!important}
+
 </style></head>
 <body>
 <div id="auth" class="auth-screen">
