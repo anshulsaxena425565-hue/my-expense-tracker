@@ -1209,7 +1209,7 @@ function ccData(c){
  const unbilled=rows.filter(x=>dateObj(x.date)>latest&&dateObj(x.date)<=now).reduce((n,x)=>n+Number(x.amount),0),outstanding=statements.reduce((n,x)=>n+x.remaining,0)+unbilled;
  return{statements,unbilled,outstanding,available:Math.max(0,c.creditLimit-outstanding),next:statements.filter(x=>x.remaining>0).sort((a,b)=>a.due-b.due)[0]};
 }
-function syncExpenseCardPicker(){const w=$('expenseCreditCardWrap'),sel=$('expenseCreditCard');if(!w||!sel)return;w.hidden=$('expenseMethod').value!=='Card';sel.innerHTML='<option value="">Select a credit card</option>'+creditCards.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.cardName)+' · '+esc(c.bankName)+'</option>').join('');}
+function syncExpenseCardPicker(){const w=$('expenseCreditCardWrap'),sel=$('expenseCreditCard');if(!w||!sel)return;w.hidden=$('expenseMethod').value!=='Credit Card';sel.innerHTML='<option value="">Select a credit card</option>'+creditCards.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.cardName)+' · '+esc(c.bankName)+'</option>').join('');}
 $('expenseMethod').addEventListener('change',syncExpenseCardPicker);
 function ccForm(c){$('ccCardForm').hidden=false;$('ccId').value=c?.id||'';$('ccFormTitle').textContent=c?'Edit credit card':'Add a credit card';$('ccName').value=c?.cardName||'';$('ccBank').value=c?.bankName||'';$('ccLimitInput').value=c?.creditLimit??'';$('ccStatementDay').value=c?.statementDay??'';$('ccDueDay').value=c?.dueDay??'';$('ccFormError').textContent='';$('ccCardForm').scrollIntoView({behavior:'smooth',block:'start'})}
 $('ccAddBtn').onclick=()=>ccForm();$('ccCancel').onclick=()=>$('ccCardForm').hidden=true;
