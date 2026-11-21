@@ -107,6 +107,28 @@ body{background:var(--bg)}.sidebar{background:#142d27}.brand-mark{background:lin
  #page-loans #loanCalculator>.grid[aria-live]{grid-template-columns:1fr!important}
 }
 
+
+/* Udhaar Tracker */
+#page-udhaar .section-title h1{font-size:27px;letter-spacing:-.7px;color:#19382d}
+#page-udhaar .udhaar-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+#page-udhaar .udhaar-stats>.card{border:1px solid #e5ebe2;border-radius:18px;padding:19px;box-shadow:0 8px 24px #18392a08}
+#page-udhaar .udhaar-stats .stat-top{font-size:11px;text-transform:uppercase;letter-spacing:.6px;font-weight:800;color:#809187}
+#page-udhaar .udhaar-stats .stat-value{font:800 23px Manrope;color:#1d4635;margin:10px 0 4px}
+#page-udhaar .udhaar-form-card{border:1px solid #dfe9df;border-radius:20px;padding:22px;background:#fffefa}
+#page-udhaar .input,#page-udhaar .select{display:block;width:100%;min-width:0;min-height:46px;padding:12px 14px;border:1px solid #e1e9df;border-radius:12px;background:#fbfcf9;color:#203d30;font:600 13px Manrope;outline:none}
+#page-udhaar label{display:flex;flex-direction:column;gap:8px;font-size:11px;font-weight:800;color:#536c5d}
+#page-udhaar .udhaar-person-card{border:1px solid #e4ebe3;border-radius:16px;padding:17px;background:#fff;box-shadow:0 5px 18px #1d3c2b08}
+#page-udhaar .udhaar-person-card strong{color:#1c4030}
+#page-udhaar .udhaar-person-card .udhaar-balance{font:800 22px Manrope;color:#176b52;margin:9px 0}
+#page-udhaar .udhaar-person-card .udhaar-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+#page-udhaar .udhaar-actions button{padding:8px 11px;font-size:11px;border-radius:9px}
+#page-udhaar .udhaar-table{min-width:650px}
+#page-udhaar .udhaar-table td{vertical-align:middle}
+#page-udhaar .udhaar-pill{display:inline-flex;padding:5px 9px;border-radius:20px;font-size:10px;font-weight:800}
+#page-udhaar .udhaar-pill.borrowed{background:#fff0e8;color:#b85d32}
+#page-udhaar .udhaar-pill.repaid{background:#e8f6ed;color:#147a46}
+@media(max-width:900px){#page-udhaar .udhaar-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#page-udhaar #udhaarForm .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#page-udhaar #udhaarPeopleList{grid-template-columns:1fr!important}}
+@media(max-width:520px){#page-udhaar #udhaarForm .grid{grid-template-columns:1fr!important}#page-udhaar .section-title{align-items:flex-start;gap:12px;flex-wrap:wrap}}
 </style>
 <style id="pocket-expense-refresh">
 .expense-modal{width:min(100%,560px);padding:26px 28px 22px;border-radius:25px;max-height:94vh;overflow:auto;background:#fffefa}
@@ -486,7 +508,7 @@ input,select,textarea{accent-color:#6558e8}
 </div>
 <div id="app" class="app" style="display:none">
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div><aside class="sidebar" id="sidebar"><div class="brand"><span class="brand-mark"><i class="ph ph-wallet"></i></span> pocket.</div>
- <div><div class="nav-label">WORKSPACE</div><nav class="nav"><button class="active" data-page="overview"><span class="ico"><i class="ph ph-squares-four"></i></span> Overview</button><button data-page="transactions"><span class="ico"><i class="ph ph-arrows-down-up"></i></span> Transactions</button><button data-page="analytics"><span class="ico"><i class="ph ph-chart-line-up"></i></span> Analytics</button><button data-page="investments"><span class="ico"><i class="ph ph-chart-presentation-chart"></i></span> Investments</button><button data-page="investment-history"><span class="ico"><i class="ph ph-clock-counter-clockwise"></i></span> Investment history</button><button data-page="loans"><span class="ico"><i class="ph ph-bank"></i></span> Loan Tracker</button><button data-page="imports"><span class="ico"><i class="ph ph-file-arrow-up"></i></span> Import statement</button></nav></div>
+ <div><div class="nav-label">WORKSPACE</div><nav class="nav"><button class="active" data-page="overview"><span class="ico"><i class="ph ph-squares-four"></i></span> Overview</button><button data-page="transactions"><span class="ico"><i class="ph ph-arrows-down-up"></i></span> Transactions</button><button data-page="analytics"><span class="ico"><i class="ph ph-chart-line-up"></i></span> Analytics</button><button data-page="investments"><span class="ico"><i class="ph ph-chart-presentation-chart"></i></span> Investments</button><button data-page="investment-history"><span class="ico"><i class="ph ph-clock-counter-clockwise"></i></span> Investment history</button><button data-page="loans"><span class="ico"><i class="ph ph-bank"></i></span> Loan Tracker</button><button data-page="udhaar"><span class="ico"><i class="ph ph-hand-coins"></i></span> Udhaar Tracker</button><button data-page="imports"><span class="ico"><i class="ph ph-file-arrow-up"></i></span> Import statement</button></nav></div>
  <div><div class="nav-label">PREFERENCES</div><nav class="nav"><button data-page="settings"><span class="ico"><i class="ph ph-gear"></i></span> Settings</button></nav></div>
  <div class="side-bottom"><div class="profile"><div class="avatar" id="sideAvatar">A</div><div style="min-width:0"><strong id="sideName">Your account</strong><small id="sideEmail">you@example.com</small></div></div><button class="nav logout-btn" id="logout" style="width:100%;margin-top:10px"><span class="ico"><i class="ph ph-sign-out"></i></span> Sign out</button></div>
 </aside>
@@ -620,6 +642,25 @@ input,select,textarea{accent-color:#6558e8}
   </div><p class="muted" style="font-size:11px;line-height:1.6;margin:13px 0 0">Estimates use monthly reducing-balance interest, with EMI and optional extra principal paid monthly. Lump sum is applied at the start of the selected month. Actual lender calculations may differ due to daily interest, payment dates, rate resets, fees, tax, and prepayment rules.</p>
  </div>
 </section>
+<section class="page" id="page-udhaar">
+ <div class="section-title"><div><h1>Udhaar Tracker</h1><p class="muted" style="margin:6px 0 0;font-size:13px">Track money borrowed from people and repayments made.</p></div><button class="primary" id="udhaarAddMore" type="button"><i class="ph ph-plus"></i> Add entry</button></div>
+ <div class="grid stats udhaar-stats" style="margin-bottom:18px">
+  <div class="card"><div class="stat-top">Total outstanding</div><div class="stat-value" id="udhaarOutstanding">₹0</div><div class="stat-foot">Still owed to people</div></div>
+  <div class="card"><div class="stat-top">Total borrowed</div><div class="stat-value" id="udhaarBorrowed">₹0</div><div class="stat-foot">All udhaar received</div></div>
+  <div class="card"><div class="stat-top">Total repaid</div><div class="stat-value" id="udhaarRepaid">₹0</div><div class="stat-foot">Payments recorded</div></div>
+  <div class="card"><div class="stat-top">People to repay</div><div class="stat-value" id="udhaarPeople">0</div><div class="stat-foot">With pending balance</div></div>
+ </div>
+ <div class="card udhaar-form-card" id="udhaarFormCard" style="margin-bottom:18px"><div class="card-head"><div><h2 id="udhaarFormTitle">Add udhaar entry</h2><p class="muted" style="font-size:12px">Record money received or a repayment. Every entry stays in history.</p></div></div>
+ <form id="udhaarForm"><div class="grid" style="grid-template-columns:repeat(4,minmax(0,1fr));gap:13px">
+ <label>Person's name<input id="udhaarPerson" class="input" required maxlength="120" placeholder="e.g. Rahul"></label>
+ <label>Entry type<select id="udhaarType" class="select"><option value="borrowed">Took udhaar</option><option value="repaid">Repaid money</option></select></label>
+ <label>Amount (₹)<input id="udhaarAmount" class="input" type="number" min="0.01" step="0.01" required placeholder="e.g. 2000"></label>
+ <label>Date<input id="udhaarDate" class="input" type="date" required></label></div>
+ <label style="display:block;margin-top:13px">Note (optional)<input id="udhaarNotes" class="input" maxlength="500" placeholder="Reason, payment method or short note"></label>
+ <div id="udhaarFormError" role="alert" style="color:#d34f60;font-size:12px;margin-top:10px"></div><div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="primary" id="udhaarSave" type="submit">Save entry</button></div></form></div>
+ <div class="card" style="margin-bottom:18px"><div class="card-head"><div><h2>People &amp; outstanding balances</h2><p class="muted" style="font-size:12px">Record repayments or clear a balance without deleting past entries.</p></div></div><div id="udhaarPeopleList" class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:12px"><div class="empty">No udhaar entries yet.</div></div></div>
+ <div class="card"><div class="card-head"><div><h2>Udhaar history</h2><p class="muted" style="font-size:12px">Every amount borrowed and repaid, newest first.</p></div><select id="udhaarHistoryFilter" class="select" style="max-width:190px"><option value="">All people</option></select></div><div class="table-wrap"><table class="udhaar-table"><thead><tr><th>Person</th><th>Date</th><th>Type</th><th>Note</th><th>Amount</th><th></th></tr></thead><tbody id="udhaarHistoryRows"></tbody></table><div class="empty" id="udhaarHistoryEmpty">Your udhaar history will appear here.</div></div></div>
+</section>
 <section class="page" id="page-investment-history">
 <div class="section-title"><div><h1>Investment history</h1><p class="muted" style="margin:6px 0 0;font-size:13px">Review closed trades, compare your exits with today's market, and learn from outcomes.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="historyFile" type="file" accept=".xlsx,.xls" hidden><button class="secondary" id="historyImportBtn" type="button"><i class="ph ph-file-arrow-up"></i> Import / replace P&amp;L</button><button class="primary" id="historyRefreshQuotes" type="button"><i class="ph ph-arrows-clockwise"></i> Compare with today's prices</button></div></div>
 <div class="card" id="historyPanel" style="margin-bottom:18px">
@@ -647,6 +688,7 @@ const APPWRITE_PROJECT_ID='6afb36e60028d5bbc86e';
 const APPWRITE_DATABASE_ID='pocket';
 const APPWRITE_TABLE_ID='expenses';
 const APPWRITE_INVESTMENTS_TABLE_ID='investments';
+const APPWRITE_UDHAAR_TABLE_ID='udhaar';
 let aw={},account=null,tablesDB=null,cloudIds=new Set(),signup=false,recoveryMode=null;
 const recoveryParams=new URLSearchParams(location.search);
 const recoveryUserId=recoveryParams.get('userId'),recoverySecret=recoveryParams.get('secret');
@@ -654,7 +696,7 @@ if(recoveryUserId&&recoverySecret)recoveryMode='reset';
 const appwriteReady=import('https://sdk.appwrite.io/web/29.2.0/index.js').then(mod=>{const client=new mod.Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);account=new mod.Account(client);tablesDB=new mod.TablesDB(client);aw={...mod,client};return mod});
 const categories=['Food & Drinks','Transport','Shopping','Bills & Utilities','Health','Entertainment','Travel','Education','Personal Care','Home','Other'];
 const icons={'Food & Drinks':'fork-knife','Transport':'car','Shopping':'shopping-bag','Bills & Utilities':'receipt','Health':'first-aid-kit','Entertainment':'film-strip','Travel':'airplane','Education':'book-open','Personal Care':'sparkle','Home':'house','Other':'package'}; const categoryIcon=c=>'<i class="ph ph-'+(icons[c]||'package')+'"></i>';
-let user=null,expenses=[],investments=[],loans=[],editingId=null,trendChart=null,categoryChart=null,yearChart=null,paymentChart=null,selectedLoanId=null;
+let user=null,expenses=[],investments=[],loans=[],udhaarEntries=[],editingId=null,trendChart=null,categoryChart=null,yearChart=null,paymentChart=null,selectedLoanId=null;
 const money=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(Number(n)||0);
 const dateObj=s=>new Date(s);
 const dateLabel=s=>dateObj(s).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
@@ -710,7 +752,7 @@ document.addEventListener('click',e=>{
  toggle.setAttribute('aria-label',reveal?'Hide password':'Show password');toggle.setAttribute('aria-pressed',String(reveal));toggle.title=reveal?'Hide password':'Show password';toggle.innerHTML=reveal?'<i class="ph ph-eye-slash" aria-hidden="true"></i>':'<i class="ph ph-eye" aria-hidden="true"></i>';
 });
 enhancePasswordInputs();
-async function enterApp(){user=await account.get();await Promise.all([loadCloudExpenses(),loadInvestments(),loadLoans()]);await processDueSipInstallments();if(!expenses.length&&!signup){const keep=confirm('No saved expenses were found for '+user.email+'. This may be a different or new Pocket account.\n\nChoose OK only if this is the account you intended to use. Choose Cancel to sign out and try your original account.');if(!keep){try{await account.deleteSession({sessionId:'current'})}catch{}authView();$('authSub').textContent='You were signed out of the empty account. Sign in with the email address you originally used for Pocket.';return}}if(!expenses.length){try{const legacy=JSON.parse(localStorage.getItem('pocket_users_v1')||'{}'),oldAccount=legacy[String(user.email).toLowerCase()];if(oldAccount&&Array.isArray(oldAccount.expenses)&&oldAccount.expenses.length&&confirm('Pocket found '+oldAccount.expenses.length+' expenses saved on this browser. Import them into your Appwrite account?')){expenses=oldAccount.expenses.map(x=>({...x,id:aw.ID.unique()}));await save();delete legacy[String(user.email).toLowerCase()];localStorage.setItem('pocket_users_v1',JSON.stringify(legacy));toast('Your previous expenses were migrated to Appwrite.')}}catch(migrationError){throw new Error('Could not migrate previous browser records: '+migrationError.message)}}document.body.classList.remove('auth-mode');$('auth').style.display='none';$('app').style.display='grid';initApp()}
+async function enterApp(){user=await account.get();await Promise.all([loadCloudExpenses(),loadInvestments(),loadLoans(),loadUdhaar()]);await processDueSipInstallments();if(!expenses.length&&!signup){const keep=confirm('No saved expenses were found for '+user.email+'. This may be a different or new Pocket account.\n\nChoose OK only if this is the account you intended to use. Choose Cancel to sign out and try your original account.');if(!keep){try{await account.deleteSession({sessionId:'current'})}catch{}authView();$('authSub').textContent='You were signed out of the empty account. Sign in with the email address you originally used for Pocket.';return}}if(!expenses.length){try{const legacy=JSON.parse(localStorage.getItem('pocket_users_v1')||'{}'),oldAccount=legacy[String(user.email).toLowerCase()];if(oldAccount&&Array.isArray(oldAccount.expenses)&&oldAccount.expenses.length&&confirm('Pocket found '+oldAccount.expenses.length+' expenses saved on this browser. Import them into your Appwrite account?')){expenses=oldAccount.expenses.map(x=>({...x,id:aw.ID.unique()}));await save();delete legacy[String(user.email).toLowerCase()];localStorage.setItem('pocket_users_v1',JSON.stringify(legacy));toast('Your previous expenses were migrated to Appwrite.')}}catch(migrationError){throw new Error('Could not migrate previous browser records: '+migrationError.message)}}document.body.classList.remove('auth-mode');$('auth').style.display='none';$('app').style.display='grid';initApp()}
 async function logout(){const buttons=[$('logout'),$('settingsLogout')];buttons.forEach(b=>{if(b){b.disabled=true;b.textContent='Signing out…'}});try{await appwriteReady;if(!account)throw new Error('Account service is not ready. Please try again.');await account.deleteSession({sessionId:'current'});user=null;expenses=[];investments=[];cloudIds=new Set();authView();$('authSub').textContent='You have been signed out securely.';}catch(error){toast('Sign out failed: '+(error?.message||'Please check your connection and try again.'));console.error('Pocket logout failed',error);}finally{buttons.forEach((b,i)=>{if(b){b.disabled=false;b.innerHTML=i===0?'<span class="ico"><i class="ph ph-sign-out"></i></span> Sign out':'Sign out'}})}}
 
 $('logout').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();logout()});$('settingsLogout').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();logout()});
@@ -1101,7 +1143,41 @@ function runLoanCalculator(){
 }
 ['calcPrincipal','calcRate','calcEmi','calcExtraMonthly','calcLump','calcLumpAfter'].forEach(id=>$(id).addEventListener('input',runLoanCalculator));
 
-function goPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+p).classList.add('active');document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));closeSidebar();if(p==='analytics'){buildFilters();renderAnalytics()}if(p==='transactions')renderTransactions();if(p==='investments')renderInvestments();if(p==='investment-history'){historyLoad()}if(p==='loans'){renderLoans();runLoanCalculator()}}
+
+async function loadUdhaar(){
+ const docs=[];let page=await tablesDB.listRows({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_UDHAAR_TABLE_ID,queries:[aw.Query.equal('userId',user.$id),aw.Query.orderDesc('entryDate'),aw.Query.limit(100)]});docs.push(...page.rows);
+ while(page.rows.length===100&&docs.length<5000){page=await tablesDB.listRows({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_UDHAAR_TABLE_ID,queries:[aw.Query.equal('userId',user.$id),aw.Query.orderDesc('entryDate'),aw.Query.limit(100),aw.Query.cursorAfter(page.rows[page.rows.length-1].$id)]});if(!page.rows.length)break;docs.push(...page.rows)}
+ udhaarEntries=docs.map(r=>({id:r.$id,...(r.data||r)}));renderUdhaar();
+}
+async function saveUdhaarEntry(x){
+ const data={userId:user.$id,person:x.person,amount:x.amount,entryType:x.entryType,entryDate:new Date(x.entryDate+'T12:00:00').toISOString(),notes:x.notes||''};
+ x.id=aw.ID.unique();await tablesDB.createRow({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_UDHAAR_TABLE_ID,rowId:x.id,data,permissions:[aw.Permission.read(aw.Role.user(user.$id)),aw.Permission.update(aw.Role.user(user.$id)),aw.Permission.delete(aw.Role.user(user.$id))]});
+}
+function udhaarGroups(){
+ const map=new Map();udhaarEntries.forEach(x=>{const key=String(x.person||'').trim().toLocaleLowerCase();if(!key)return;if(!map.has(key))map.set(key,{name:String(x.person).trim(),borrowed:0,repaid:0,entries:[]});const g=map.get(key);g.entries.push(x);if(x.entryType==='repaid')g.repaid+=Number(x.amount)||0;else g.borrowed+=Number(x.amount)||0});
+ return [...map.values()].map(g=>({...g,balance:Math.max(0,g.borrowed-g.repaid)})).sort((a,b)=>b.balance-a.balance||a.name.localeCompare(b.name));
+}
+function renderUdhaar(){
+ const groups=udhaarGroups(),borrowed=udhaarEntries.filter(x=>x.entryType!=='repaid').reduce((a,x)=>a+Number(x.amount||0),0),repaid=udhaarEntries.filter(x=>x.entryType==='repaid').reduce((a,x)=>a+Number(x.amount||0),0),outstanding=groups.reduce((a,g)=>a+g.balance,0);
+ $('udhaarOutstanding').textContent=money(outstanding);$('udhaarBorrowed').textContent=money(borrowed);$('udhaarRepaid').textContent=money(repaid);$('udhaarPeople').textContent=groups.filter(g=>g.balance>.005).length;
+ $('udhaarPeopleList').innerHTML=groups.length?groups.map(g=>'<article class="udhaar-person-card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><strong>'+esc(g.name)+'</strong><span class="muted" style="font-size:11px">'+g.entries.length+' entr'+(g.entries.length===1?'y':'ies')+'</span></div><div class="udhaar-balance">'+money(g.balance)+'</div><div class="muted" style="font-size:11px">Borrowed '+money(g.borrowed)+' · Repaid '+money(g.repaid)+'</div><div class="udhaar-actions"><button class="primary" type="button" data-udhaar-repay="'+esc(g.name)+'" '+(g.balance<=.005?'disabled':'')+'>Add repayment</button><button class="secondary" type="button" data-udhaar-clear="'+esc(g.name)+'" '+(g.balance<=.005?'disabled':'')+'>Clear balance</button></div></article>').join(''):'<div class="empty">No udhaar entries yet. Add the first amount above.</div>';
+ const filter=$('udhaarHistoryFilter'),selected=filter.value;filter.innerHTML='<option value="">All people</option>'+groups.map(g=>'<option value="'+esc(g.name)+'">'+esc(g.name)+'</option>').join('');if(groups.some(g=>g.name===selected))filter.value=selected;
+ const rows=udhaarEntries.filter(x=>!filter.value||String(x.person).toLocaleLowerCase()===filter.value.toLocaleLowerCase()).slice().sort((a,b)=>new Date(b.entryDate)-new Date(a.entryDate));
+ $('udhaarHistoryRows').innerHTML=rows.map(x=>'<tr><td><strong>'+esc(x.person)+'</strong></td><td>'+dateLabel(x.entryDate)+'</td><td><span class="udhaar-pill '+(x.entryType==='repaid'?'repaid':'borrowed')+'">'+(x.entryType==='repaid'?'Repaid':'Took udhaar')+'</span></td><td class="muted">'+esc(x.notes||'—')+'</td><td class="amount '+(x.entryType==='repaid'?'positive':'negative')+'">'+(x.entryType==='repaid'?'−':'+')+money(x.amount)+'</td><td><button class="link-btn" type="button" data-udhaar-delete="'+esc(x.id)+'">Delete</button></td></tr>').join('');
+ $('udhaarHistoryEmpty').style.display=rows.length?'none':'block';
+ $('udhaarPeopleList').querySelectorAll('[data-udhaar-repay]').forEach(b=>b.onclick=()=>{const g=groups.find(x=>x.name===b.dataset.udhaarRepay);if(g){$('udhaarPerson').value=g.name;$('udhaarType').value='repaid';$('udhaarAmount').value='';$('udhaarAmount').max=g.balance;$('udhaarFormTitle').textContent='Add repayment for '+g.name;$('udhaarAmount').focus();$('udhaarFormCard').scrollIntoView({behavior:'smooth',block:'center'})}});
+ $('udhaarPeopleList').querySelectorAll('[data-udhaar-clear]').forEach(b=>b.onclick=async()=>{const g=groups.find(x=>x.name===b.dataset.udhaarClear);if(!g||g.balance<=.005)return;if(!confirm('Record '+money(g.balance)+' as fully repaid to '+g.name+'? Previous history will be kept.'))return;await createUdhaarQuick(g.name,g.balance)});
+ $('udhaarHistoryRows').querySelectorAll('[data-udhaar-delete]').forEach(b=>b.onclick=async()=>{const x=udhaarEntries.find(z=>z.id===b.dataset.udhaarDelete);if(!x||!confirm('Delete this history entry?'))return;try{await tablesDB.deleteRow({databaseId:APPWRITE_DATABASE_ID,tableId:APPWRITE_UDHAAR_TABLE_ID,rowId:x.id});udhaarEntries=udhaarEntries.filter(z=>z.id!==x.id);renderUdhaar();toast('History entry deleted.')}catch(e){toast('Could not delete entry: '+(e.message||'Try again.'))}});
+}
+async function createUdhaarQuick(person,amount){try{const x={person,amount,entryType:'repaid',entryDate:new Date().toISOString().slice(0,10),notes:'Balance cleared'};await saveUdhaarEntry(x);udhaarEntries.unshift(x);renderUdhaar();toast('Balance cleared and recorded in history.')}catch(e){toast('Could not record repayment: '+(e.message||'Try again.'))}}
+$('udhaarAddMore').onclick=()=>{$('udhaarForm').reset();$('udhaarDate').value=new Date().toISOString().slice(0,10);$('udhaarType').value='borrowed';$('udhaarAmount').removeAttribute('max');$('udhaarFormTitle').textContent='Add udhaar entry';$('udhaarFormError').textContent='';$('udhaarFormCard').scrollIntoView({behavior:'smooth',block:'center'});$('udhaarPerson').focus()};
+$('udhaarHistoryFilter').onchange=renderUdhaar;
+$('udhaarForm').onsubmit=async e=>{e.preventDefault();const btn=$('udhaarSave'),person=$('udhaarPerson').value.trim(),amount=Number($('udhaarAmount').value),entryType=$('udhaarType').value,entryDate=$('udhaarDate').value,notes=$('udhaarNotes').value.trim(),group=udhaarGroups().find(g=>g.name.toLocaleLowerCase()===person.toLocaleLowerCase());
+ $('udhaarFormError').textContent='';if(!person||!(amount>0)||!Number.isFinite(amount)||!entryDate){$('udhaarFormError').textContent='Enter a valid name, amount and date.';return}if(entryType==='repaid'&&(!group||amount>group.balance+.005)){$('udhaarFormError').textContent='Repayment cannot exceed the outstanding balance ('+money(group?group.balance:0)+').';return}
+ btn.disabled=true;btn.textContent='Saving…';const x={person,amount,entryType,entryDate,notes};try{await saveUdhaarEntry(x);udhaarEntries.unshift(x);renderUdhaar();$('udhaarForm').reset();$('udhaarDate').value=new Date().toISOString().slice(0,10);$('udhaarAmount').removeAttribute('max');$('udhaarFormTitle').textContent='Add udhaar entry';toast('Udhaar entry saved.')}catch(err){$('udhaarFormError').textContent='Could not save entry: '+(err.message||'Please try again.')}finally{btn.disabled=false;$('udhaarSave').textContent='Save entry'}
+};
+
+function goPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+p).classList.add('active');document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));closeSidebar();if(p==='analytics'){buildFilters();renderAnalytics()}if(p==='transactions')renderTransactions();if(p==='investments')renderInvestments();if(p==='investment-history'){historyLoad()}if(p==='loans'){renderLoans();runLoanCalculator()}if(p==='udhaar'){renderUdhaar()}}
 const closeSidebar=()=>{$('sidebar').classList.remove('open');$('sidebarBackdrop').classList.remove('show');document.body.style.overflow=''};const openSidebar=()=>{$('sidebar').classList.add('open');$('sidebarBackdrop').classList.add('show');document.body.style.overflow='hidden'};$('menuBtn').onclick=()=>{$('sidebar').classList.contains('open')?closeSidebar():openSidebar()};$('sidebarBackdrop').onclick=closeSidebar;document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSidebar()});
 $('exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({format:'pocket-expenses-v1',exportedAt:new Date().toISOString(),user:{name:user.name,email:user.email},expenses},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pocket-expenses-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exported.')};
 $('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(data.format!=='pocket-expenses-v1'||!Array.isArray(data.expenses))throw Error('Invalid backup');const valid=data.expenses.filter(x=>x&&typeof x.name==='string'&&Number(x.amount)>0&&x.date&&x.id);const replace=confirm('Import '+valid.length+' expenses? Choose OK to replace your current list, or Cancel to merge.');if(replace)expenses=valid;else{const ids=new Set(expenses.map(x=>x.id));expenses.push(...valid.filter(x=>!ids.has(x.id)))}await save();buildFilters();render();toast('Backup imported and synced.')}catch(err){toast('Could not import this backup file.')}e.target.value=''};
