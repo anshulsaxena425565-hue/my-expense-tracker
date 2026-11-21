@@ -129,6 +129,43 @@ body{background:var(--bg)}.sidebar{background:#142d27}.brand-mark{background:lin
 #page-udhaar .udhaar-pill.repaid{background:#e8f6ed;color:#147a46}
 @media(max-width:900px){#page-udhaar .udhaar-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#page-udhaar #udhaarForm .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#page-udhaar #udhaarPeopleList{grid-template-columns:1fr!important}}
 @media(max-width:520px){#page-udhaar #udhaarForm .grid{grid-template-columns:1fr!important}#page-udhaar .section-title{align-items:flex-start;gap:12px;flex-wrap:wrap}}
+
+/* Udhaar KPI visual system */
+#page-udhaar .udhaar-stats{gap:15px}
+#page-udhaar .udhaar-kpi{position:relative;isolation:isolate;overflow:hidden;min-height:156px;padding:19px 20px 17px!important;border:1px solid transparent!important;border-radius:20px!important;box-shadow:0 9px 26px rgba(28,54,39,.055)!important;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+#page-udhaar .udhaar-kpi:hover{transform:translateY(-3px);box-shadow:0 15px 32px rgba(28,54,39,.10)!important}
+#page-udhaar .udhaar-kpi-head{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+#page-udhaar .udhaar-kpi .stat-top{font-size:10px;letter-spacing:1.05px;font-weight:850}
+#page-udhaar .udhaar-kpi .stat-value{position:relative;z-index:1;font:800 clamp(22px,2vw,28px) Manrope;margin:16px 0 10px;letter-spacing:-.8px;line-height:1.1;overflow-wrap:anywhere}
+#page-udhaar .udhaar-kpi .stat-foot{position:relative;z-index:1;display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700}
+#page-udhaar .udhaar-kpi-icon{width:37px;height:37px;display:grid;place-items:center;border-radius:12px;font-size:19px;flex:none}
+#page-udhaar .udhaar-kpi-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
+#page-udhaar .udhaar-kpi-glow{position:absolute;z-index:-1;width:115px;height:115px;border-radius:50%;right:-38px;bottom:-55px;opacity:.55;filter:blur(1px)}
+#page-udhaar .kpi-payable{background:linear-gradient(135deg,#fff8f6 0%,#fff0ec 100%)!important;border-color:#f5dcd5!important}
+#page-udhaar .kpi-payable .stat-top,#page-udhaar .kpi-payable .stat-foot{color:#a65b50}
+#page-udhaar .kpi-payable .stat-value{color:#c33f42}
+#page-udhaar .kpi-payable .udhaar-kpi-icon{background:#ffe0da;color:#c33f42}
+#page-udhaar .kpi-payable .udhaar-kpi-dot{background:#d94e50;box-shadow:0 0 0 3px #d94e501c}
+#page-udhaar .kpi-payable .udhaar-kpi-glow{background:#f7b9ae}
+#page-udhaar .kpi-receivable{background:linear-gradient(135deg,#f4fcf6 0%,#e8f7ed 100%)!important;border-color:#d3ebda!important}
+#page-udhaar .kpi-receivable .stat-top,#page-udhaar .kpi-receivable .stat-foot{color:#4b8763}
+#page-udhaar .kpi-receivable .stat-value{color:#16804b}
+#page-udhaar .kpi-receivable .udhaar-kpi-icon{background:#d7f0df;color:#16804b}
+#page-udhaar .kpi-receivable .udhaar-kpi-dot{background:#239b5b;box-shadow:0 0 0 3px #239b5b1c}
+#page-udhaar .kpi-receivable .udhaar-kpi-glow{background:#a8dfb8}
+#page-udhaar .kpi-borrowed{background:linear-gradient(135deg,#fffbf2 0%,#fff5df 100%)!important;border-color:#f1e5c7!important}
+#page-udhaar .kpi-borrowed .stat-top,#page-udhaar .kpi-borrowed .stat-foot{color:#987b42}
+#page-udhaar .kpi-borrowed .stat-value{color:#a87924}
+#page-udhaar .kpi-borrowed .udhaar-kpi-icon{background:#f8e9c4;color:#a87924}
+#page-udhaar .kpi-borrowed .udhaar-kpi-dot{background:#c69436;box-shadow:0 0 0 3px #c694361c}
+#page-udhaar .kpi-borrowed .udhaar-kpi-glow{background:#f1d28c}
+#page-udhaar .kpi-lent{background:linear-gradient(135deg,#f3faff 0%,#e9f3fc 100%)!important;border-color:#d9e7f5!important}
+#page-udhaar .kpi-lent .stat-top,#page-udhaar .kpi-lent .stat-foot{color:#557a9c}
+#page-udhaar .kpi-lent .stat-value{color:#2871a8}
+#page-udhaar .kpi-lent .udhaar-kpi-icon{background:#d9eafb;color:#2871a8}
+#page-udhaar .kpi-lent .udhaar-kpi-dot{background:#438ac3;box-shadow:0 0 0 3px #438ac31c}
+#page-udhaar .kpi-lent .udhaar-kpi-glow{background:#b2d3ef}
+@media(max-width:520px){#page-udhaar .udhaar-kpi{min-height:140px;padding:15px!important}#page-udhaar .udhaar-kpi .stat-value{font-size:21px;margin:13px 0 8px}}
 </style>
 <style id="pocket-expense-refresh">
 .expense-modal{width:min(100%,560px);padding:26px 28px 22px;border-radius:25px;max-height:94vh;overflow:auto;background:#fffefa}
@@ -644,11 +681,11 @@ input,select,textarea{accent-color:#6558e8}
 </section>
 <section class="page" id="page-udhaar">
  <div class="section-title"><div><h1>Udhaar Tracker</h1><p class="muted" style="margin:6px 0 0;font-size:13px">Track money borrowed from people and repayments made.</p></div><button class="primary" id="udhaarAddMore" type="button"><i class="ph ph-plus"></i> Add entry</button></div>
- <div class="grid stats udhaar-stats" style="margin-bottom:18px">
-  <div class="card"><div class="stat-top">You owe</div><div class="stat-value" id="udhaarOutstanding">₹0</div><div class="stat-foot">Outstanding borrowed balance</div></div>
-  <div class="card"><div class="stat-top">Owed to you</div><div class="stat-value" id="udhaarOwedToYou">₹0</div><div class="stat-foot">Outstanding amount lent</div></div>
-  <div class="card"><div class="stat-top">Total borrowed</div><div class="stat-value" id="udhaarBorrowed">₹0</div><div class="stat-foot">Cumulative udhaar taken</div></div>
-  <div class="card"><div class="stat-top">Total lent</div><div class="stat-value" id="udhaarLent">₹0</div><div class="stat-foot">Cumulative udhaar given</div></div>
+ <div class="grid stats udhaar-stats" style="margin-bottom:22px">
+  <div class="card udhaar-kpi kpi-payable"><div class="udhaar-kpi-head"><span class="stat-top">You owe</span><span class="udhaar-kpi-icon"><i class="ph ph-arrow-up-right"></i></span></div><div class="stat-value" id="udhaarOutstanding">₹0</div><div class="stat-foot"><span class="udhaar-kpi-dot"></span> Amount you need to pay</div><div class="udhaar-kpi-glow"></div></div>
+  <div class="card udhaar-kpi kpi-receivable"><div class="udhaar-kpi-head"><span class="stat-top">Owed to you</span><span class="udhaar-kpi-icon"><i class="ph ph-arrow-down-left"></i></span></div><div class="stat-value" id="udhaarOwedToYou">₹0</div><div class="stat-foot"><span class="udhaar-kpi-dot"></span> Amount you can receive</div><div class="udhaar-kpi-glow"></div></div>
+  <div class="card udhaar-kpi kpi-borrowed"><div class="udhaar-kpi-head"><span class="stat-top">Total borrowed</span><span class="udhaar-kpi-icon"><i class="ph ph-hand-coins"></i></span></div><div class="stat-value" id="udhaarBorrowed">₹0</div><div class="stat-foot"><span class="udhaar-kpi-dot"></span> Lifetime amount received</div><div class="udhaar-kpi-glow"></div></div>
+  <div class="card udhaar-kpi kpi-lent"><div class="udhaar-kpi-head"><span class="stat-top">Total lent</span><span class="udhaar-kpi-icon"><i class="ph ph-wallet"></i></span></div><div class="stat-value" id="udhaarLent">₹0</div><div class="stat-foot"><span class="udhaar-kpi-dot"></span> Lifetime amount given</div><div class="udhaar-kpi-glow"></div></div>
  </div>
  <div class="card udhaar-form-card" id="udhaarFormCard" style="margin-bottom:18px"><div class="card-head"><div><h2 id="udhaarFormTitle">Add udhaar entry</h2><p class="muted" style="font-size:12px">Record money you borrowed from someone or lent to someone, plus repayments in either direction. Every entry stays in history.</p></div></div>
  <form id="udhaarForm"><div class="grid" style="grid-template-columns:repeat(4,minmax(0,1fr));gap:13px">
