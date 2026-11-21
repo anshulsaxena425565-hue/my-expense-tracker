@@ -40,6 +40,68 @@ body{background:var(--bg)}.sidebar{background:#142d27}.brand-mark{background:lin
 .password-input-wrap{position:relative;width:100%;display:flex;align-items:center}.password-input-wrap input{width:100%;padding-right:48px!important}.password-visibility-toggle{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:34px;height:34px;display:grid;place-items:center;border:0;border-radius:8px;background:transparent;color:#7c8294;font-size:18px;cursor:pointer}.password-visibility-toggle:hover{background:#f0efff;color:var(--brand)}.password-visibility-toggle:focus-visible{outline:2px solid var(--brand);outline-offset:2px}.password-input-wrap input::-ms-reveal{display:none}
 
 .loan-stats{grid-template-columns:repeat(4,minmax(0,1fr))}.loan-card{border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff}.loan-card.selected{border-color:#176b52;box-shadow:0 0 0 2px #176b5218}.loan-card h3{margin:0;font-size:15px}.loan-card .loan-actions{display:flex;gap:7px;flex-wrap:wrap}.loan-card .loan-actions button{padding:7px 10px;font-size:11px}.loan-progress{height:7px;border-radius:8px;background:#edf0ed;overflow:hidden;margin:10px 0}.loan-progress span{display:block;height:100%;background:#168653}@media(max-width:900px){.loan-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#loanList{grid-template-columns:1fr!important}}@media(max-width:600px){#page-loans .section-title{align-items:flex-start;flex-wrap:wrap}.loan-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#loanFormCard .grid,#loanCalculator>.grid{grid-template-columns:1fr!important}}
+
+/* Loan Tracker — refined finance workspace */
+#page-loans{--loan-ink:#19382d;--loan-muted:#788b80;--loan-line:#e4ebe3}
+#page-loans .section-title{margin:2px 0 22px;align-items:center}
+#page-loans .section-title h1{font-size:27px;letter-spacing:-.7px;color:var(--loan-ink)}
+#page-loans .section-title p{font-size:13px;line-height:1.55;max-width:520px}
+#page-loans #loanAddBtn{border-radius:13px;padding:13px 19px;background:linear-gradient(135deg,#176b52,#238b68);box-shadow:0 8px 20px #176b5228}
+#page-loans .loan-stats{gap:13px}
+#page-loans .loan-stats>.card{position:relative;overflow:hidden;padding:19px 20px;border:1px solid #e5ebe2;border-radius:18px;box-shadow:0 8px 24px #18392a08}
+#page-loans .loan-stats>.card:after{content:"";position:absolute;width:76px;height:76px;border-radius:50%;right:-27px;top:-30px;background:#e9f3e8;opacity:.8}
+#page-loans .loan-stats .stat-top{font-size:11px;text-transform:uppercase;letter-spacing:.65px;font-weight:800;color:#809187}
+#page-loans .loan-stats .stat-value{font:800 23px Manrope;color:#1d4635;letter-spacing:-.5px;margin:10px 0 4px}
+#page-loans .loan-stats .stat-foot{font-size:11px;color:#8a9a90}
+#page-loans #loanFormCard{border:1px solid #dfe9df;border-radius:22px;padding:0!important;overflow:hidden;background:#fffefa;box-shadow:0 18px 50px #173b2810}
+#page-loans #loanFormCard>.card-head{padding:21px 24px;background:linear-gradient(115deg,#edf5e9,#f8f8ef);border-bottom:1px solid #e4ecdf;margin:0}
+#page-loans #loanFormTitle{font:800 20px Manrope;color:#1b4634;margin:0}
+#page-loans #loanFormCard .card-head p{margin:5px 0 0!important;color:#7d9182}
+#page-loans #loanFormCard #loanForm{padding:23px 24px 22px}
+#page-loans #loanFormCard #loanForm>.grid{gap:18px 16px!important}
+#page-loans #loanFormCard label,#page-loans #loanCalculator label{display:flex;flex-direction:column;gap:8px;font-size:11px;font-weight:800;letter-spacing:.12px;color:#536c5d;min-width:0}
+#page-loans .input,#page-loans .select,#page-loans textarea{
+ display:block;width:100%;min-width:0;box-sizing:border-box;min-height:47px;padding:12px 14px;
+ border:1px solid #e1e9df;border-radius:12px;background:#fbfcf9;color:#203d30;
+ font:600 13px Manrope, sans-serif;outline:none;box-shadow:0 2px 5px #1b3c2705;
+ transition:border-color .18s,box-shadow .18s,background .18s,transform .18s;
+}
+#page-loans .input:hover,#page-loans .select:hover,#page-loans textarea:hover{border-color:#c8d8c8;background:#fff}
+#page-loans .input:focus,#page-loans .select:focus,#page-loans textarea:focus{border-color:#32936c!important;background:#fff;box-shadow:0 0 0 4px #32936c18!important}
+#page-loans .input::placeholder,#page-loans textarea::placeholder{color:#aab8ad;font-weight:500}
+#page-loans input[type=number]{font-variant-numeric:tabular-nums}
+#page-loans #loanNotes{min-height:82px;resize:vertical;margin-top:8px}
+#page-loans #loanForm>label{display:block;margin-top:20px}
+#page-loans #loanFormError{font-size:12px;font-weight:600;padding:0 2px}
+#page-loans #loanSave{min-width:145px;border-radius:12px;padding:13px 20px;background:linear-gradient(135deg,#176b52,#238b68);box-shadow:0 7px 16px #176b5220}
+#page-loans #loanCancel{border-radius:12px;padding:10px 15px;background:#fff;border-color:#e1e9df}
+#page-loans #loanList>.loan-card{border-radius:18px;padding:19px;border:1px solid #e5ebe3;box-shadow:0 6px 20px #1d3c2b08;transition:transform .18s,box-shadow .18s,border-color .18s}
+#page-loans #loanList>.loan-card:hover{transform:translateY(-2px);box-shadow:0 13px 28px #1d3c2b10;border-color:#cbdccf}
+#page-loans #loanList>.loan-card.selected{border-color:#4c9b72;box-shadow:0 0 0 3px #4c9b7218}
+#page-loans #loanList>.loan-card h3{font:800 16px Manrope;color:#1c4030}
+#page-loans .loan-progress{height:8px;background:#edf2eb;border-radius:20px}
+#page-loans .loan-progress span{border-radius:20px;background:linear-gradient(90deg,#6aaf76,#19845d)}
+#page-loans .loan-actions button{border-radius:10px;border-color:#e2e9e0;background:#fbfcfa;font-weight:700;color:#4d6656}
+#page-loans .loan-actions button:hover{background:#edf5ed;border-color:#c7dcc9;color:#176b52}
+#page-loans #loanCalculator{border:1px solid #e1e9df;border-radius:22px;padding:23px;background:linear-gradient(145deg,#fffefa,#f9fbf6)}
+#page-loans #loanCalculator .card-head h2{font:800 20px Manrope;color:#1c4231;margin:0}
+#page-loans #loanCalculator .card-head p{margin:5px 0 0!important}
+#page-loans #loanCalculator>.grid:not(.stats){gap:15px!important}
+#page-loans #loanCalculator>.grid[aria-live]>div{border:1px solid #e4ece2;background:#f4f8f1!important;border-radius:16px!important;padding:17px!important;min-width:0}
+#page-loans #loanCalculator>.grid[aria-live]>div:nth-child(2){background:#edf7f0!important;border-color:#dceee1}
+#page-loans #loanCalculator>.grid[aria-live]>div:nth-child(3){background:#eff4fb!important;border-color:#e0e9f5}
+#page-loans #loanCalculator>.grid[aria-live] strong{font:800 21px Manrope;color:#204b36;letter-spacing:-.4px;overflow-wrap:anywhere}
+#page-loans #loanCalculator>.grid[aria-live] small{display:block;margin-top:5px;font-size:11px}
+#page-loans #loanCalculator>p{padding:12px 14px;background:#f3f6ef;border-radius:12px;color:#77887c!important}
+@media(max-width:700px){
+ #page-loans #loanFormCard #loanForm{padding:17px}
+ #page-loans #loanFormCard>.card-head{padding:18px}
+ #page-loans #loanFormCard .grid,#page-loans #loanCalculator>.grid{grid-template-columns:1fr!important}
+ #page-loans .section-title h1{font-size:23px}
+ #page-loans #loanCalculator{padding:17px}
+ #page-loans #loanCalculator>.grid[aria-live]{grid-template-columns:1fr!important}
+}
+
 </style>
 <style id="pocket-expense-refresh">
 .expense-modal{width:min(100%,560px);padding:26px 28px 22px;border-radius:25px;max-height:94vh;overflow:auto;background:#fffefa}
